@@ -53,20 +53,27 @@ begin
     combi_nextState:process(curState,rxNow,rxData,txdone,dataready,seqDone)
     begin
        case curState is
-          When init =>                 ----------------waiting the Rx have a byte from the computer
-          next
-       end case;
-    end process;
+          When init => 
+              if  rxNow ='1' then
+                  nextState <= check
+              else 
+                  nextState   <= IDLE            ----------------waiting the Rx have a byte from the computer
+              end if;
+   
     
     
     
     
-  when S4_NUM =>
-    if rxData >= '00110000' and rxData <='00111001' then -----0-9
-      nextState <= CORRECT_INPUT;
-    else 
-      nextState <= INIT;
-    end if;
+          when Check =>
+              if countN = 0 then-------count is 0 check the first input from list
+                if rxData = '01100001' or rxData ='01100101' then------check the first charactor is A/a
+                      nextState <= CORRECT_INPUT;
+      
+                if rxData >= '00110000' and rxData <='00111001' then -----0-9
+                       nextState <= CORRECT_INPUT;
+                else 
+                      nextState <= INIT;
+                end if;
     
   
   
@@ -76,19 +83,20 @@ begin
   
   
   
-  when CORRECT_INPUT =>    
-    if counterN <= 1 then
-        Asc(11 downto 8) <= rxData (3 downto 0);------users input 8 bit ASCII get the last four bit and store it to the register
-    elsif  counterN<=2 then
-        Asc ( 7 downto 4) <= rxData (3 downto 0);
-    elsif counterN <=3 then
-        Asc (3 downto 0) <= rxData (3 downto 0);
-    end if;
+        when CORRECT_INPUT => 
+              EN='1';------start to count the number of N
+    
+              RxDone= '1';  
+          
+              if count < 4 then  
     
         
-    else
-    nextState < CORRECT_INPUT;
-    end if;
+      
+    
+        when transmit =>
+              TxData <= RxData;
+              TxNow <='1'
+    
     
     
     
@@ -98,17 +106,17 @@ begin
     
     rxdone <= '0';
     start <= '0'
-    txData 
+    txData <=
     
     ELSIF curState = CORRECT_INPUT then
     EN1 <= '1'
     
     
     
-    
-    
-    
+        end case;
     end process;
+    
+ 
     
     
     
@@ -161,6 +169,7 @@ begin
   registerNum: PROCESS(clk,)-----save users input get the 12bit BCD 
   Begin
     if clk'EVENT AND clk='1' THEN
+      
       
             
          
