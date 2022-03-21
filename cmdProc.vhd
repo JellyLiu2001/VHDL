@@ -53,18 +53,18 @@ begin
     combi_nextState:process(curState,rxNow,rxData,txdone,dataready,seqDone)
     begin
        case curState is
-          When init => 
+        When init => 
               if  rxNow ='1' then
-                  nextState <= Rxdata_ready
+                  nextState <= Rxdata_ready;
               else 
-                  nextState   <= IDLE            ----------------waiting the Rx have a byte from the computer
+                  nextState   <= IDLE;           ----------------waiting the Rx have a byte from the computer
               end if;
    
     
     
     
         ----Part 1  input Numwords to data processor.
-        when Check1 =>----- check A/a
+        when Check =>----- check A/a
               if countN = 0 then              -------count is 0 check the first input from list
                 if rxData = '01100001' or rxData ='01100101' then------check the first charactor is A/a
                       EN= '1'                   -------at this time counter ready to count the number of 0-9 charactors
@@ -73,28 +73,33 @@ begin
                       
                       nextState <= init;            --------- not A/a ,back to the init to find the A and a occurs
                 end if;
-              else----counter not 0 ,check if it is a number
-                     nextState <= check2;
+              else                              ----counter not 0, means it is not the first bit, check if it is a number
+                   if rxData >= '00110000' and rxData <='00111001' then -----0-9  
+                      if counter = 1 then
+                        R(11 downto 8) =  RxData(3 downto 0);
+                      elsif counter = 2 then
+                        R( 7 downto 4) = RxData(3 downto 0);
+                      elsif counter = 3 then
+                        R(3 downto 0) = RxData (3 downto 0);
+                      
+                      end if; 
+                      nextState <= transmit_receive;
+              else                                        ----------not a number or a/A then counter should be reset.
+                
+                    RST = 1;
+                    RxDone <= '1';
+                    nextState <= transmit_receive;
               end if;
                 
-        When  Check2  =>  --------check if it is a number
-              if rxData >= '00110000' and rxData <='00111001' then -----0-9
-                    if counterN <3 then
-                      nextState <= init;
-                    else
-                      nextState <= transmit_receive;
-              else 
-                      RST  = '1'
-                      nextState <= INIT;
-              end if;
+      
     
         when transmit_receive =>
               TxData <= RxData;
-              TxNow <='1'
-              nextState <= Check_Transmit
+              TxNow <='1';
+              nextState <= Check_Transmit;
         
         
-        when check=>
+        when check_Transmit=>
               TxNow <='0';
               RxDone <='0';
               
@@ -102,12 +107,19 @@ begin
              
         
         when send =>
+          TxNow <='0'
+          TxDone<= '0'
+          if counter = 3 then
+            RST ='1'
+            numWords_bcd(0) <= Q(3 downto 0)
+            numWords_bcd(1) <= Q(7 downto 4)
+            numWords_bcd(2) <= Q(11 downto 8) 
+            nextState <= RECIEVE;
+          else
+            nextState <=IDLE;
+          end if;
           
-          RST ='1'
-          numWords_bcd(0) <= Q(3 downto 0)
-          numWords_bcd(1) <= Q(7 downto 4)
-          numWords_bcd(2) <= Q(11 downto 8) 
-          nextState <= Tx_trans
+            
         
      
           
@@ -184,9 +196,13 @@ begin
      
          
          
-  registerNum: PROCESS(clk,)-----save users input get the 12bit BCD 
+  registerNum: PROCESS(clk,R1,R2)-----save users input get the 12bit BCD 
   Begin
     if clk'EVENT AND clk='1' THEN
+      R2<=R1;
+    end if ;
+  end process;
+         
       
       
             
