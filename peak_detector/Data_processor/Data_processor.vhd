@@ -1,19 +1,24 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use work.common_pack.all;
 
-entity data_processor is
-	port (
-		clk: in std_logic; --clock
-		reset: in std_logic; --reset
-		ctrlOut: in std_logic; --ctrl_2
-		ctrlIn: out std_logic; --ctrl_1
-		data: in std_logic_vector(7 downto 0); --data(8bit) 16 to binary. 
-		start: in std_logic; --start
-		numWords: in std_logic_vector(12 downto 0); --numWords(12bit)(3*4)
-		dataReady: out; --dataReady
-		byte: out std_logic_vector(7 downto 0); --byte(8bit)
-		maxIndax: out std_logic_vector(11 downto 0); --maxIndex(12bit)(3*4)
-		dataResults: out std_logic_vector(55 downto 0); --dataResults(56bit)(7*8)
-		seqDone: out std_logic --seqDone
-	);
-end dataGen;
+  ENTITY dataConsume is
+    port (
+      clk: in std_logic;
+      reset: in std_logic; -- synchronous reset
+      start: in std_logic; --check rising edge, when 1, start
+      numWords_bcd: in BCD_ARRAY_TYPE(2 downto 0);
+      ctrlIn: in std_logic;
+      ctrlOut: out std_logic;
+      data: in std_logic_vector(7 downto 0);
+      dataReady: out std_logic;
+      byte: out std_logic_vector(7 downto 0);
+      seqDone: out std_logic;
+      maxIndex: out BCD_ARRAY_TYPE(2 downto 0);
+      dataResults: out CHAR_ARRAY_TYPE(0 to 6) 
+    );
+  end dataConsume;
+  architecture dataConsume_state OF dataConsume IS 
+    type state_type IS(init, first);
+    SIGNAL curstate,nextState:state_type;
+    SIGNAL count:integer:=0;
