@@ -34,7 +34,7 @@ end component;
 
 
 ARCHITECTURE cmdProc_interim OF cmdProc is
-  type cmd_state is (INIT
+  type cmd_state is (init,check,
 
  
  
@@ -185,7 +185,7 @@ begin
 
         IF EN_1 = '1' THEN              
 
-           counterN <= onecounter + 1; 
+           counterN <= counterN + 1; 
 
         END IF; 
 
@@ -201,14 +201,7 @@ begin
     if clk'EVENT AND clk='1' THEN
       R2<=R1;
     end if ;
-  end process;
-         
-      
-      
-            
-         
-         
-         
+  end process;  
          
          
          
