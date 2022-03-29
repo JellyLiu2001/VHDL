@@ -17,6 +17,7 @@
 -- To run simulation successfully, besides this testbench, the following
 -- source files also need to be included in your Modelsim Project:
 -- 
+
 -- 
 -- cmdProc.vhd :        the command processor that your need to design;
 -- dataConsume_synthesis.vhd: The Xilinx synthesised versions of the Data Processor 
@@ -327,4 +328,3 @@ begin
    );   	
   	
  end testbench;
-

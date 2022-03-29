@@ -17,10 +17,10 @@ use work.common_pack.all;
       maxIndex: out BCD_ARRAY_TYPE(2 downto 0); --3*4 BCD
       dataResults: out CHAR_ARRAY_TYPE(0 to 6)  -- 7*8 (-3:peak:3)
     ); 
-  end dataConsume;
+  END dataConsume;
 architecture dataConsume_state OF dataConsume IS 
-  type state_type IS(init, first);
-  SIGNAL curState,nextState:state_type;
+  TYPE state_type IS(init, first);
+  SIGNAL curState, nextState:state_type;
   SIGNAL count:integer:=0;
   SIGNAL ctrlIn_delayed, ctrlIn_detected:std_logic;
   SIGNAL Maxnum:std_logic;
@@ -34,20 +34,11 @@ BEGIN
 
 
 ----------------------------------------------------
-counter_process:process()--to calculate the index and compare the peak value. 
+counter_process:process(DATA)--to calculate the index and compare the peak value. 
 BEGIN
-  IF reset = '0' THEN -- active high reset
-    COUNTER0 <= 0;
-  ELSIF clk' EVENT and clk='1' THEN
-    IF reset0 = '0' THEN
-      IF enable0 = '1' THEN -- enable
-        COUNTER0 <= COUNTER0 + 1 ;
-      END IF;
-    ELSE
-      COUNTER0 <= 0;
-    END IF;
-  END IF;
+COUNTER = COUNTER + 1;
 END PROCESS;  
 ----------------------------------------------------
 shifter_process:process()
 begin
+END PROCESS;
