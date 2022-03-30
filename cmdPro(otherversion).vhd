@@ -21,6 +21,29 @@ port (
       start: out std_logic;
       numWords_bcd: out BCD_ARRAY_TYPE(2 downto 0);
       dataReady: in std_logic;
+      byte: in std_logic_vector(7 downto 0);USE WORK.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.all;
+USE IEEE.numeric_std.all;
+use work.common_pack.all;
+
+
+entity cmdProcessor is
+port (
+
+      clk: in std_logic;
+      reset: in std_logic;
+      rxnow: in std_logic;
+      rxData: in std_logic_vector (7 downto 0);
+      txData: out std_logic_vector (7 downto 0);
+      rxdone: out std_logic;
+      ovErr: in std_logic;
+      framErr: in std_logic;
+      txnow: out std_logic;
+      txdone: in std_logic;
+      start: out std_logic;
+      numWords_bcd: out BCD_ARRAY_TYPE(2 downto 0);
+      dataReady: in std_logic;
       byte: in std_logic_vector(7 downto 0);
       maxIndex: in BCD_ARRAY_TYPE(2 downto 0);
       dataResults: in CHAR_ARRAY_TYPE(0 to RESULT_BYTE_NUM-1);
@@ -49,12 +72,7 @@ begin
       WHEN S1_RXDATA =>
         IF rxData='01000001' or '01100001' THEN-------A/a
           nextState <= input_num;
-        END IF;
-      WHEN input_num =>
-        IF rxData >= '00110000' and rxData <='00111001' then -----0-9
-          nextState <= cmd
-       
-      when S1_RXDATA =>
+        
         if rxData= '01010000' or '01110000' THEN-----P/p
           nextState <= S2_PEAK;
          
@@ -257,4 +275,12 @@ COUNTER_NUM :PROCESS(RESET,CLK,X)
     ELSIF CLK'EVENT AND CLK='1' THEN
       curState <= nextState;
     END IF;
-  END PROCESS; -- seq 
+  END PROCESS; -- seq  
+      maxIndex: in BCD_ARRAY_TYPE(2 downto 0);
+      dataResults: in CHAR_ARRAY_TYPE(0 to RESULT_BYTE_NUM-1);
+      seqDone: in std_logic
+    );
+ 
+end;
+
+
