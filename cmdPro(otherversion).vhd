@@ -22,7 +22,7 @@ port (
       txnow: out std_logic;
       txdone: in std_logic;
       start: out std_logic;
-      numWords_bcd: out BCD_ARRAY_TYPE(2 downto 0);
+      numWords_bcd: out BCD_ARRAY_TYPE(2 downto 0): ;
       dataReady: in std_logic;
       byte: in std_logic_vector(7 downto 0);
       maxIndex: in BCD_ARRAY_TYPE(2 downto 0);
@@ -39,27 +39,38 @@ architecture dataflow of cmdProcessor is
   SIGNAL COUNT_PEAK,COUNT_LIST,COUNT_NUM: integer:=0;
  
 begin
- 
+
+  numWords_bcd(0) <= '0000';-------set initial value to test
+	numWords_bcd(1) <= '0000';
+	numWords_bcd(2) <= '0000'; 
 
   combi_nextState: process(currentState, rxData)
   begin
     case currentState is
       when S0_INIT =>
+        
         if rxnow='1' THEN
           nextState <= S1_RXDATA;
         end if ;
        
       WHEN S1_RXDATA =>
         IF rxData='01000001' or '01100001' THEN-------A/a
-          nextState <= S4_NUM;
+              nextState <= S4_NUM;
         
-        if rxData= '01010000' or '01110000' THEN-----P/p
-          
-          nextState <= S2_PEAK;
+        elsif rxData= '01010000' or '01110000' THEN-----P/p
+          if  numWords_bcd(0) = '0000' and numWords_bcd(1) = '0000' and numWords_bcd(2) = '0000' THEN
+              nextState <= S0_INIT;
+          else
+              nextState <= S2_PEAK;
+          end if;
          
         ELSIF rxData='01001100' or '01101100' THEN ------L/l
-          nextState <=S3_LIST;
-       
+          if  numWords_bcd(0) = '0000' and numWords_bcd(1) = '0000' and numWords_bcd(2) = '0000' THEN
+              nextState <= S0_INIT;
+          else   
+              nextState <=S3_LIST;
+          end if; 
+          
         ELSE
           nextState <= S0_INIT;
          
@@ -118,6 +129,7 @@ begin
           if txdone = '1' THEN
             txnow <='0';
           end if;
+        END IF; 
           
         if COUNT_PEAK = 3 and txnow='0' THEN
           txData(7 downto 4) <= '0011';
