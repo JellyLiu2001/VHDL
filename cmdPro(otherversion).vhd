@@ -5,27 +5,7 @@ USE IEEE.numeric_std.all;
 use work.common_pack.all;
 
 
-entity cmdProcessor is
-port (
 
-      clk: in std_logic;
-      reset: in std_logic;
-      rxnow: in std_logic;
-      rxData: in std_logic_vector (7 downto 0);
-      txData: out std_logic_vector (7 downto 0);
-      rxdone: out std_logic;
-      ovErr: in std_logic;
-      framErr: in std_logic;
-      txnow: out std_logic;
-      txdone: in std_logic;
-      start: out std_logic;
-      numWords_bcd: out BCD_ARRAY_TYPE(2 downto 0);
-      dataReady: in std_logic;
-      byte: in std_logic_vector(7 downto 0);USE WORK.all;
-LIBRARY IEEE;
-USE IEEE.std_logic_1164.all;
-USE IEEE.numeric_std.all;
-use work.common_pack.all;
 
 
 entity cmdProcessor is
@@ -71,9 +51,10 @@ begin
        
       WHEN S1_RXDATA =>
         IF rxData='01000001' or '01100001' THEN-------A/a
-          nextState <= input_num;
+          nextState <= S4_NUM;
         
         if rxData= '01010000' or '01110000' THEN-----P/p
+          
           nextState <= S2_PEAK;
          
         ELSIF rxData='01001100' or '01101100' THEN ------L/l
