@@ -34,11 +34,16 @@ BEGIN
 
 
 ----------------------------------------------------
-counter_process:process(DATA)--to calculate the index and compare the peak value. 
+COUNTER_process:process(DATA)--To calculate the index and compare the peak value. 
 BEGIN
-COUNTER = COUNTER + 1;
+  if COUNTER_RESET='1' THEN
+      COUNTER<=0;
+  else 
+      COUNTER = COUNTER + 1;
+  end if;
 END PROCESS;  
 ----------------------------------------------------
-shifter_process:process()
-begin
+shifter_process:process(DATA) -- To store the number(bcd). 
+BEGIN
+
 END PROCESS;
