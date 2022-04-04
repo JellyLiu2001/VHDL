@@ -31,35 +31,66 @@ end;
 
 
 architecture dataflow of cmdProcessor is
-  type state_type is (IDLE,input_num,S0_INIT , S1_RXDATA , S2_PEAK, S3_LIST, S4_NUM, S5, S6);  
+  type state_type is (IDLE,A/a,input_num,valid_num,invalid_num, send_data, tx_ready) 
   signal currentState, nextState: state_type;
+  SIGNAL Reg,Out: std_logic_vector(11 downto 0);
   SIGNAL COUNT_PEAK,COUNT_LIST,COUNT_NUM: integer:=0;
-  SIGNAL R
 begin
+ txData <='00000000';--initalisation
+ start <='0';
+ txnow <='0';
+ rxdone <='0';
  
 
-  combi_nextState: process(currentState, rxData)
+  combi_nextState: process(currentState,rxnow, txdone, seqDone, dataReady)
   begin
     case currentState is
-      when S0_INIT =>
+      when IDLE =>
         if rxnow='1' THEN
-          nextState <= S1_RXDATA;
+          nextState <= ANNN;
+	else
+	  nextState <= IDLE;
         end if;
        
-      WHEN S1_RXDATA =>
+      WHEN A/a =>
         IF rxData='01000001' or '01100001' THEN-------A/a
           nextState <= input_num;
         END IF;
       WHEN input_num =>
-        IF COUNT_NNN = 1 THEN-----------'0-9'_'0011'
-          R(11 downto 8) =  rxData(3 downto 0);
-        ELSIF COUNT_NNN = 2 THEN
-          R( 7 downto 4) = rxData(3 downto 0);
-        ELSIF COUNT_NNN = 3 THEN
-          R(3 downto 0) = rxData (3 downto 0);
-          nextstate <= cmd
-        END IF;
-       
+	IF rxData >= "00110000" AND rxData <= "00111001" THEN ------number 0-9
+          IF COUNT_NNN = 1 THEN-----------'0-9'_'0011'
+          Reg(11 downto 8) =  rxData(3 downto 0);
+          ELSIF COUNT_NNN = 2 THEN
+          Reg( 7 downto 4) = rxData(3 downto 0);
+          ELSIF COUNT_NNN = 3 THEN
+          Reg(3 downto 0) = rxData (3 downto 0);
+          END IF;
+	  nextState <= valid_num;
+	  ELSE
+	    nextState <= invalid_num;
+      WHEN valid_num =>
+	rxDone <='1';
+	nextState <= start_trans;
+      WHEN invalid_num;
+	nextState <= A/a;
+      WHEN start_trans =>
+	txData <= rxdData;
+	txnow <= '1';
+	nextState <= send_data;
+      WHEN send_data =>
+	txnow <='0';
+	rxdome <='0';
+	numWords_bcd(0) <= Out(3 downto 0);
+	numWords_bcd(1) <= Out(7 downto 4);
+	numWords_bcd(3) <= Out(11 downto 8);
+	nextState <= tx_ready;
+      WHEN tx_ready =>
+	txnow <='0';
+	IF txdone='1' THEN
+	   
+	
+
+
       when S1_RXDATA =>
         if rxData= '01010000' or '01110000' THEN-----P/p
           nextState <= S2_PEAK;
@@ -174,31 +205,22 @@ COUNTER_NUM :PROCESS(RESET,CLK,X)
  
 COUNTER_NNN :PROCESS(RESET,CLK,X)
 		BEGIN
-		  IF curState=input_num THEN
+		  IF curState=valid THEN
 		    COUNT_NNN <=0;
 		  ELSIF CLK'EVENT and CLK='1' THEN
-		    IF txnow='1' THEN
+		    IF rxnow='1' THEN
 		      COUNT_NNN <= COUNT_NNN +1;
-		    ELSIF COUNT_NNN=3 THEN
-		      COUNT_NNN <= 0
 		    END IF;
 		  END IF;
-		END PROCESS;
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+		END PROCESS
  
        
-             
+Register: PROCESS (CLK, Reg, Out)
+     BEGIN
+       IF CLK'EVENT AND CLK='1' THEN
+         Out <= Reg;
+       END IF;
+     END PROCESS;
   eq_state: PROCESS (CLK, reset)
   BEGIN
     IF reset = '0' THEN
@@ -207,5 +229,3 @@ COUNTER_NNN :PROCESS(RESET,CLK,X)
       curState <= nextState;
     END IF;
   END PROCESS; -- seq
-
-
