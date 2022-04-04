@@ -56,17 +56,17 @@ begin
         end if ;
        
       WHEN S1_RXDATA =>
-        IF rxData="01000001" or "01100001"  THEN-------A/a
+        IF rxData="01000001" or rxdata="01100001"  THEN-------A/a
               nextState <= S4_NUM;
         
-        elsif rxData= "01010000" or "01110000" THEN-----P/p
+        elsif rxData= "01010000" or rxdata="01110000" THEN-----P/p
           if  numWords_bcdtest(0) = "0000" and numWords_bcdtest(1) = "0000" and numWords_bcdtest(2) = "0000" THEN
               nextState <= S0_INIT;
           else
               nextState <= S2_PEAK;
           end if;
          
-        ELSIF rxData="01001100" or "01101100" THEN ------L/l
+        ELSIF rxData="01001100" or rxdata="01101100" THEN ------L/l
           if  numWords_bcdtest(0) = "0000" and numWords_bcdtest(1) = "0000" and numWords_bcdtest(2) = "0000" THEN
               nextState <= S0_INIT;
           else   
@@ -159,7 +159,7 @@ begin
           if txdone = '1' THEN
             txnowis <='0';            
           end if;
-        END IF;
+        
         
         elsif COUNT_LIST=1 and txnowis='0' THEN
           txData <= dataResults(COUNT_LIST);
@@ -183,7 +183,7 @@ begin
           if txdone = '1' THEN
             txnowis <='0';            
           end if;
-        END IF;
+        
         
         elsif COUNT_LIST=4 and txnowis='0' THEN
           txData <= dataResults(COUNT_LIST);
