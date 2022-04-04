@@ -43,8 +43,8 @@ architecture dataflow of cmdProcessor is
 begin
 
   numWords_bcdtest(0) <= "0000" ;-------set initial value to test
-	numWords_bcdtest(1) <= "0000" ;
-	numWords_bcdtest(2) <= "0000" ; 
+  numWords_bcdtest(1) <= "0000" ;
+  numWords_bcdtest(2) <= "0000" ; 
 
   combi_nextState: process(currentState, rxData)
   begin
@@ -114,35 +114,35 @@ begin
           if txdone = '1' THEN
             txnowis <='0';            
           end if;
-        END IF;
+        
            
-        if COUNT_PEAK = 1 and txnowis='0' THEN
+        elsif COUNT_PEAK = 1 and txnowis='0' THEN
           txData <= "00100000";
           txnowis <='1';
           if txdone = '1' THEN
             txnowis <='0';
           end if;    
-        END IF;  
+          
                   
-        if COUNT_PEAK = 2 and txnowis='0' THEN
+        elsif COUNT_PEAK = 2 and txnowis='0' THEN
           txData(7 downto 4) <= "0011";
           txData(3 downto 0) <= maxIndex(2);
           txnowis <='1';
           if txdone = '1' THEN
             txnowis <='0';
           end if;
-        END IF; 
+        
           
-        if COUNT_PEAK = 3 and txnowis='0' THEN
+        elsif COUNT_PEAK = 3 and txnowis='0' THEN
           txData(7 downto 4) <= "0011";
           txData(3 downto 0) <= maxIndex(1);
           txnowis <='1';
           if txdone = '1' THEN
             txnowis <='0';
           end if;
-        END IF; 
+         
         
-        if COUNT_PEAK = 4 and txnowis='0' THEN
+        elsif COUNT_PEAK = 4 and txnowis='0' THEN
           txData(7 downto 4) <= "0011";
           txData(3 downto 0) <= maxIndex(0);
           txnowis <='1';
@@ -161,7 +161,23 @@ begin
           end if;
         END IF;
         
-        if COUNT_LIST=1 and txnowis='0' THEN
+        elsif COUNT_LIST=1 and txnowis='0' THEN
+          txData <= dataResults(COUNT_LIST);
+          txnowis <='1';
+          if txdone = '1' THEN
+            txnowis <='0';            
+          end if;
+        
+        
+        elsif COUNT_LIST=2 and txnowis='0' THEN
+          txData <= dataResults(COUNT_LIST);
+          txnowis <='1';
+          if txdone = '1' THEN
+            txnowis <='0';            
+          end if;
+        
+        
+        elsif COUNT_LIST=3 and txnowis='0' THEN
           txData <= dataResults(COUNT_LIST);
           txnowis <='1';
           if txdone = '1' THEN
@@ -169,39 +185,23 @@ begin
           end if;
         END IF;
         
-        if COUNT_LIST=2 and txnowis='0' THEN
+        elsif COUNT_LIST=4 and txnowis='0' THEN
           txData <= dataResults(COUNT_LIST);
           txnowis <='1';
           if txdone = '1' THEN
             txnowis <='0';            
           end if;
-        END IF;
+       
         
-        if COUNT_LIST=3 and txnowis='0' THEN
+        elsif COUNT_LIST=5 and txnowis='0' THEN
           txData <= dataResults(COUNT_LIST);
           txnowis <='1';
           if txdone = '1' THEN
             txnowis <='0';            
           end if;
-        END IF;
         
-        if COUNT_LIST=4 and txnowis='0' THEN
-          txData <= dataResults(COUNT_LIST);
-          txnowis <='1';
-          if txdone = '1' THEN
-            txnowis <='0';            
-          end if;
-        END IF;
         
-        if COUNT_LIST=5 and txnowis='0' THEN
-          txData <= dataResults(COUNT_LIST);
-          txnowis <='1';
-          if txdone = '1' THEN
-            txnowis <='0';            
-          end if;
-        END IF;
-        
-        if COUNT_LIST=6 and txnowis='0' THEN
+        elsif COUNT_LIST=6 and txnowis='0' THEN
           txData <= dataResults(COUNT_LIST);
           txnowis <='1';
           if txdone = '1' THEN
