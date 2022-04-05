@@ -50,7 +50,8 @@ begin
   begin
     case currentState is
       when S0_INIT =>
-        
+        resetPeak <= '1' ;------------reset counters
+        resetList<='1';
         if rxnow='1' THEN
           nextState <= S1_RXDATA;
         end if ;
@@ -61,33 +62,38 @@ begin
         
         elsif rxData= "01010000" or rxdata="01110000" THEN-----P/p
           if  numWords_bcdtest(0) = "0000" and numWords_bcdtest(1) = "0000" and numWords_bcdtest(2) = "0000" THEN
-              nextState <= S0_INIT;
-          else
+              nextState <= S0_INIT;---if numwords are still contain three initial value means that we enter P/p before we run aNNN,
+          else                     ---so the command should be rejected.     
               nextState <= S2_PEAK;
           end if;
          
         ELSIF rxData="01001100" or rxdata="01101100" THEN ------L/l
           if  numWords_bcdtest(0) = "0000" and numWords_bcdtest(1) = "0000" and numWords_bcdtest(2) = "0000" THEN
-              nextState <= S0_INIT;
+              nextState <= S0_INIT;---same as P/p
           else   
               nextState <=S3_LIST;
           end if; 
           
         ELSE
-          nextState <= S0_INIT;
+          nextState <= S0_INIT;-------any other wrong command should be rejected and return to initial state
          
         END IF;
        
      
       WHEN  S2_PEAK =>
           resetPeak <= '0' ;
-          nextState <= S0_INIT;
+          if COUNT_PEAK=5 THEN
+            nextState <= S0_INIT;
+          end if;
          
          
       WHEN  S3_LIST =>
        
           resetList<='0';
-          nextState <= S0_INIT;
+          if COUNT_LIST=7 THEN---------when output 7 byte then return to inital state 
+            nextState <= S0_INIT;
+          end if;  
+          
       WHEN  S4_NUM =>
         
           nextState <= S0_INIT;
@@ -108,7 +114,7 @@ begin
   begin
     case currentState is
       when S2_PEAK=>
-        if COUNT_PEAK = 0 and txnowis='0' THEN
+        if COUNT_PEAK = 0 and txnowis='0' THEN----output peak value
           txData <= dataResults(3);
           txnowis <='1';
           if txdone = '1' THEN
@@ -116,7 +122,7 @@ begin
           end if;
         
            
-        elsif COUNT_PEAK = 1 and txnowis='0' THEN
+        elsif COUNT_PEAK = 1 and txnowis='0' THEN-----output a space
           txData <= "00100000";
           txnowis <='1';
           if txdone = '1' THEN
@@ -124,7 +130,7 @@ begin
           end if;    
           
                   
-        elsif COUNT_PEAK = 2 and txnowis='0' THEN
+        elsif COUNT_PEAK = 2 and txnowis='0' THEN----first bit of maxindex
           txData(7 downto 4) <= "0011";
           txData(3 downto 0) <= maxIndex(2);
           txnowis <='1';
@@ -133,7 +139,7 @@ begin
           end if;
         
           
-        elsif COUNT_PEAK = 3 and txnowis='0' THEN
+        elsif COUNT_PEAK = 3 and txnowis='0' THEN----second bit of maxindex
           txData(7 downto 4) <= "0011";
           txData(3 downto 0) <= maxIndex(1);
           txnowis <='1';
@@ -142,7 +148,7 @@ begin
           end if;
          
         
-        elsif COUNT_PEAK = 4 and txnowis='0' THEN
+        elsif COUNT_PEAK = 4 and txnowis='0' THEN----third bit of maxindex
           txData(7 downto 4) <= "0011";
           txData(3 downto 0) <= maxIndex(0);
           txnowis <='1';
@@ -276,5 +282,8 @@ COUNTER_LIST :PROCESS(RESET,CLK)
   END PROCESS; -- seq  
   
 END dataflow;
+    
+
+
     
 
