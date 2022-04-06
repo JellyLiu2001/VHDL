@@ -35,11 +35,46 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL Controlforindex, Controlforcomplete : std_logic
 BEGIN 
 
-  C ombi_nextState:process(curState, X)
-  BEGIN case curState IS 
-  when start =>1
-    when INIT=>
+combi_nextState:process(curState, X)
+  BEGIN 
+    CASE curState IS 
+      WHEN init => -- Wait for start signal
+        IF start = 1 THEN
+          nextState => first;
+        ELSE
+          nextState => init;
+        END IF
+      WHEN first => --Wait for ctrl1 and ctrl2
+        IF ctrlIn_detected = 1 THEN
+          nextState => second;
+        Else 
+          nextState => first;
+        END IF
+      WHEN second => --Wait for dataready signal
+        IF DATAREADY =1 THEN
+          nextState => third;
+        Else
+          nextState => second;
+        END IF
+      WHEN third =>  --Wait for index signal, and convert hexadecimal to binomial
+        IF Controlforindex =1 THEN
+          nextState => fourth;
+        Else 
+          nextState => third;
+        END IF
+      WHEN fourth => --wait for complete signal
+        IF Controlforcomplete =1 THEN
+          nextState => fifth;
+        Else
+          nextState => fourth;
+        END IF
+      When fifth => --complete
+          nextState => init;
+END PROCESS;
 
+HexaToBinomial_process:process(DATA)
+BEGIN
+END PROCESS;
 
 ----------------------------------------------------
 
