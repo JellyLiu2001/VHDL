@@ -118,18 +118,8 @@ begin
           else
             nextState <=IDLE;
           end if;
-          
-            
-        
-     
-          
-          
-          
-              
-    
-    
-    
-    
+
+
     combi_output:process(curState);
     begin
     -----set the default values to represent all initial condtions
@@ -202,40 +192,4 @@ begin
       R2<=R1;
     end if ;
   end process;  
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
          
