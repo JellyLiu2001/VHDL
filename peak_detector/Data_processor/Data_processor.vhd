@@ -21,10 +21,10 @@ use ieee.numeric_std.all;
   END dataConsume;
 
 architecture dataConsume_state OF dataConsume IS 
-  TYPE state_type IS(init, first);
-  SIGNAL init,first:state_type;--状态
+  TYPE state_type IS(init, first, second, third, fourth, fifth);
+  SIGNAL init,first,second,third,fourth,fifth:state_type;--状态
   SIGNAL counter_reset,compare_reset:std_logic;  --清空
-  SIGNAL ctrlIn_delayed, ctrlIn_detected,ctrlOut_reg:std_logic;
+  SIGNAL ctrlOut_detected, ctrlIn_detected,ctrlOut_reg:std_logic;
   SIGNAL data:std_vector(7 downto 0);--传来的数据
   SIGNAL peak:std_logic;--最大数
   SIGNAL COUNTER : integer:=0;--计数器
@@ -35,7 +35,8 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL Controlforindex, Controlforcomplete : std_logic
 BEGIN 
 
-combi_nextState:process(curState, X)
+ctrlIn_detected = ctrl_In xor ctrlIn_delayed
+combi_nextState:process(curState, X, )
   BEGIN 
     CASE curState IS 
       WHEN init => -- Wait for start signal
@@ -45,18 +46,22 @@ combi_nextState:process(curState, X)
           nextState => init;
         END IF
       WHEN first => --Wait for ctrl1 and ctrl2
-        IF ctrlIn_detected = 1 THEN
+        ctrlOut_detected = ctrl_Out xor ctrlOut_reg
+        IF reset= '0' and ctrlOut_detected='1' THEN
+          ctrlIn_delayed = not ctrlIn_delayed
           nextState => second;
-        Else 
+        ElSIF reset = '0' and ctrlOut_detected='0' THEN
           nextState => first;
+        ELSE
+          nextState => init;
         END IF
       WHEN second => --Wait for dataready signal
-        IF DATAREADY =1 THEN
+        IF DATAREADY = '1' THEN
           nextState => third;
         Else
           nextState => second;
         END IF
-      WHEN third =>  --Wait for index signal, and convert hexadecimal to binomial
+      WHEN third =>  --Wait for index signal, and convert hexadecimal to decimal
         IF Controlforindex =1 THEN
           nextState => fourth;
         Else 
@@ -69,11 +74,21 @@ combi_nextState:process(curState, X)
           nextState => fourth;
         END IF
       When fifth => --complete
-          nextState => init;
+          nextState => init; 
+          reset='1'
+          
 END PROCESS;
 
-HexaToBinomial_process:process(DATA)
-BEGIN
+delay_CtrlOut: process(clk)     
+  begin
+    if rising_edge(clk) then
+      ctrlOut_reg <= ctrlOut;
+    end if;
+  end process;
+  
+HexaToBinomial_process:process(data)  
+  begin
+    if
 END PROCESS;
 
 ----------------------------------------------------
