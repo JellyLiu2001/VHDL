@@ -19,20 +19,23 @@ use ieee.numeric_std.all;
       dataResults: out CHAR_ARRAY_TYPE(0 TO 6)  -- 7*8 (-3:peak:3)
     ); 
   END dataConsume;
+
 architecture dataConsume_state OF dataConsume IS 
   TYPE state_type IS(init, first);
   SIGNAL init,first:state_type;--状态
-  signal counter_reset,compare_reset:std_logic;  --清空
-  SIGNAL ctrlIn_delayed, ctrlIn_detected:std_logic;
-  signal data:std_vector(7 downto 0);--传来的数据
+  SIGNAL counter_reset,compare_reset:std_logic;  --清空
+  SIGNAL ctrlIn_delayed, ctrlIn_detected,ctrlOut_reg:std_logic;
+  SIGNAL data:std_vector(7 downto 0);--传来的数据
   SIGNAL peak:std_logic;--最大数
   SIGNAL COUNTER : integer:=0;--计数器
-  signal prefix:char_array_type(0 TO 3);--记peak前三位
-  signal finnal_result:char_array_type(0 TO 7);--记全部
-  signal index, index_peak:integer;--记位置
+  SIGNAL prefix:char_array_type(0 TO 3);--记peak前三位
+  SIGNAL finnal_result:char_array_type(0 TO 7);--记全部
+  SIGNAL index, index_peak:integer;--记位置
+  SIGNAL DATAREADY : std_logic;
+  SIGNAL Controlforindex, Controlforcomplete : std_logic
 BEGIN 
 
-  combi_nextState:process(curState, X)
+  C ombi_nextState:process(curState, X)
   BEGIN case curState IS 
   when start =>1
     when INIT=>
@@ -51,12 +54,12 @@ END PROCESS;
 
 ----------------------------------------------------
 
-SHIFTER_process:process(data) -- TO store the number(bcd). 
+SHIFTER_process:process(data) --存三位
 BEGIN
 IF rising_edge(clk) and ctrlIn_detected='1' THEN
     for i in 0 TO 2 loop
-      prefix(i)<=prefix(i+1)
-      end loop;
+      prefix(i)<=prefix(i+1);
+    end loop;
       prefix(3)<=data;
 END PROCESS;
 
@@ -64,8 +67,9 @@ END PROCESS;
 
 COMPARATOR_process:process(clk,counter)
 BEGIN
-IF compare_reset='1' or curstate= start THEN
+IF compare_reset='1' or curstate= start THEN--清除
   index_peak<="0";---
+END IF;
 
 ELSIF rising_edge(clk) THEN
 
@@ -77,6 +81,7 @@ ELSIF rising_edge(clk) THEN
 
   ELSIF peak(7)='0' and data(7)='1' THEN
     peak<=peak;
+  END IF;
   
   ELSIF peak(7)='0' and data(7)='0' THEN
     IF data > finnal_result(3) THEN
