@@ -210,7 +210,7 @@ architecture dataflow of cmdProcessor is
       WHEN  S3_LIST =>
        
           resetList<='0';
-          if COUNT_LIST=7 THEN---------when output 7 byte then return to inital state 
+          if COUNT_LIST=14 THEN---------when output 7 byte then return to inital state 
             nextState <= S0_INIT;
           end if;  
           
