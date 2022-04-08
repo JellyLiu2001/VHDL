@@ -63,19 +63,24 @@ begin
             end if;
       
       When count_N =>
-      if rxData >="00110000" and rxData<="00111001" then------check 0-9
-        if COUNT_NUM = 0 then
-            R(11 downto 8) <= rxData(3 downto 0);
-        elsif COUNT_NUM =  1 then
-            R(7 downto 4) <= rxData(3 downto 0);
-        elsif COUNT_NUM = 2 then
-            R (3 downto 0) <= rxData(3 downto 0);
-        end if;
-        nextState <= counter_receive;
-      else  
+      
+      if rxNow = '1' then
+       if rxData >="00110000" and rxData<="00111001" then------check 0-9
+            if COUNT_NUM = 0 then
+             R(11 downto 8) <= rxData(3 downto 0);
+            elsif COUNT_NUM =  1 then
+             R(7 downto 4) <= rxData(3 downto 0);
+            elsif COUNT_NUM = 2 then
+             R (3 downto 0) <= rxData(3 downto 0);
+            end if;
+         nextState <= counter_receive;
+        else  
           nextState <=  counter_RESET;
             
         end if;
+      else 
+        nextState <= count_N;
+      end if;
         
       WHEN counter_RESET =>
          
@@ -88,11 +93,16 @@ begin
           nextState <= Check;
           
       WHEN check =>
+      IF  rxData >="00110000" and rxData<="00111001" then
           if COUNT_NUM < 3 then
-            nextState <= S0_INIT;
+            nextState <= count_N;
           else ---------have contain aNNN
             nextState <= GIVE_Num;
           end if;
+      ELSE 
+          nextState <= S0_INIT;
+      end if;
+ 
       WHEN GIVE_Num =>
             numWords_bcd(2) <= register2(11 downto 8);  
    
@@ -106,7 +116,7 @@ begin
       
       When  recieve_byte =>
           if dataReady ='1' then
-            if byte(7 downto 4) < 1001 then    ---------first 4 bits represents from 0-9
+            if byte(7 downto 4) < "1010" then    ---------first 4 bits represents from 0-9
                 R(7 downto 4)<="0011";
                 R(3 downto 0) <= byte(7 downto 4);
             else 
@@ -133,15 +143,13 @@ begin
       
       
       When Print_byte_one =>
-        if seqDone ='1' then---check if it is the final byte
-          
-        end if;
+        
         nextState <= recieve_byte_2;
       
       
       When recieve_byte_2 =>
         if txdone='1' then
-            if byte(3 downto 0) < 1001 then    ---------last 4 bits represents from 0-9
+            if byte(3 downto 0) < "1010" then    ---------last 4 bits represents from 0-9
                 R(7 downto 4)<="0011";
                 R(3 downto 0) <= byte(3 downto 0);
             else 
@@ -161,7 +169,7 @@ begin
                   R(3 downto 0) <= "0110";
                 end if;
             end if;
-            nextState <= Print_byte_one;
+            nextState <= Print_byte_two;
           else
             nextState <= recieve_byte_2;
           end if;
@@ -170,7 +178,7 @@ begin
         
       When Print_byte_two =>
         
-        nextState <= Give_data;
+        nextState <= Give_data ;
       
       When print_last =>
         if encount2 <='1' then
@@ -196,7 +204,7 @@ begin
     
     case currentState is
       when S0_INIT =>
-        txnow<='0';
+        txNow<='0';
         start <='0';
         rxDone<='0';
         encount2<='0';
@@ -211,12 +219,14 @@ begin
          end if;
            
       When count_N =>
+        if rxNow = '1' then
           if rxData >="00110000" and rxData<="00111001" then------check 0-9  
               encount2<='1';
               RxDone <='1';
           
           
           end if;
+        end if;
           
           
          
@@ -323,7 +333,7 @@ begin
              
   seq_state: PROCESS (CLK, reset)
   BEGIN
-    IF reset = '0' THEN
+    IF reset = '1' THEN
       currentState <= S0_INIT;
     ELSIF CLK'EVENT AND CLK='1' THEN
       currentState <= nextState;
@@ -331,5 +341,3 @@ begin
   END PROCESS; -- seq  
   
 END dataflow;
-                  
-       
