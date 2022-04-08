@@ -33,7 +33,7 @@ port (
 end ;
 
 architecture dataflow of cmdProc is
-  type state_type is (S0_INIT , S1_RXDATA ,count_N,counter_RESET,counter_receive,transmition,check,GIVE_Num,Give_data,recieve_byte,Print_byte_one,recieve_byte_2,Print_byte_two,print_last,undefined);  
+  type state_type is (S0_INIT , S1_RXDATA ,count_N,counter_RESET,counter_receive,transmition,check,GIVE_Num,Give_data,recieve_byte,Print_byte_one,recieve_byte_2,Print_byte_two,recieve_space,print_space,print_last,undefined);  
     signal currentState, nextState: state_type;
     SIGNAL COUNT_NUM: integer:=0;
 
@@ -178,7 +178,24 @@ begin
         
       When Print_byte_two =>
         
-        nextState <= Give_data ;
+        nextState <= print_space;
+      
+      when recieve_space =>
+          if txdone ='1' then
+            R(7 downto 0)<= "00100000";
+            nextState <= print_space;
+          end if;
+      when print_space =>
+         nextState <= Give_data;
+        
+          
+           
+     
+      
+      
+          
+           
+     
       
       When print_last =>
         if encount2 <='1' then
@@ -273,7 +290,19 @@ begin
         
         txData <= register2(7 downto 0);
         txNow <='1';
-     
+      
+      When recieve_space =>
+        if txDone='1' then
+          txNow <='0';
+        end if;
+      
+      when print_space => 
+          
+            txNow <='1';
+            txData<= "00100000";
+            
+        
+        
       When print_last =>
         if encount2 <='1' then
           txData <= register2(7 downto 0);
