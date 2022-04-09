@@ -37,7 +37,7 @@ architecture dataflow of cmdProcessor is
   type state_type is (S0_INIT , S1_RXDATA , S2_PEAK, S3_LIST, S4_NUM, S5, S6);  
   signal currentState, nextState: state_type;
   SIGNAL COUNT_PEAK,COUNT_LIST,COUNT_NUM: integer:=0;----three counters
-  signal numWords_bcdtest: BCD_ARRAY_TYPE(2 downto 0) ;-----cannot read out put signal so we musr set a intermediate signal
+  signal ifANNN : integer:=0;
   signal resetPeak,resetList: std_logic:='0';------reset signal 
   --signal txnowis : std_logic:='0';----------cannot read output
 
@@ -50,53 +50,37 @@ architecture dataflow of cmdProcessor is
   begin
      midNum1:= binaryNum(7 downto 4);
      if midNum1="0000"   then--0
-       hexNum1:="00110000";
-       
+       hexNum1:="00110000";     
      elsif midNum1="0001"   then--1
-       hexNum1:="00110001";
-       
+       hexNum1:="00110001";       
      elsif midNum1= "0010"  then--2
-       hexNum1:="00110010";
-       
+       hexNum1:="00110010";      
      elsif midNum1= "0011" then--3
-       hexNum1:="00110011";
-       
+       hexNum1:="00110011";       
      elsif midNum1= "0100"  then--4
-       hexNum1:="00110100";
-       
+       hexNum1:="00110100";       
      elsif midNum1= "0101"  then--5
-       hexNum1:="00110101";
-      
+       hexNum1:="00110101";      
      elsif midNum1= "0110"  then--6
-       hexNum1:="00110110"; 
-       
+       hexNum1:="00110110";        
      elsif midNum1= "0111"  then--7
-       hexNum1:="00110111";
-       
+       hexNum1:="00110111";       
      elsif midNum1= "1000"  then--8
-       hexNum1:="00110110";
-       
+       hexNum1:="00110110";       
      elsif midNum1= "1001"  then--9
-       hexNum1:="00111001";
-      
+       hexNum1:="00111001";      
      elsif midNum1= "1010"  then--A
-       hexNum1:="01000001";
-     
+       hexNum1:="01000001";     
      elsif midNum1= "1011"  then--B
-       hexNum1:="01000010"; 
- 
+       hexNum1:="01000010";  
      elsif midNum1= "1100"  then--C
-       hexNum1:="01000011"; 
- 
+       hexNum1:="01000011";  
      elsif midNum1= "1101"  then--D
-       hexNum1:="01000100";
- 
+       hexNum1:="01000100"; 
      elsif midNum1= "1110"  then--E
-       hexNum1:="01000101";       
- 
+       hexNum1:="01000101";        
      elsif midNum1= "1111"  then--F
-       hexNum1:="01000110";      
-       
+       hexNum1:="01000110";             
      end if; 
      return hexNum1;
   end BtoH1;
@@ -109,50 +93,35 @@ architecture dataflow of cmdProcessor is
   begin
      midNum1:= binaryNum(3 downto 0);
      if midNum1="0000"   then--0
-       hexNum1:="00110000";
-       
+       hexNum1:="00110000";       
      elsif midNum1="0001"   then--1
-       hexNum1:="00110001";
-       
+       hexNum1:="00110001";      
      elsif midNum1= "0010"  then--2
-       hexNum1:="00110010";
-       
+       hexNum1:="00110010";     
      elsif midNum1= "0011" then--3
-       hexNum1:="00110011";
-       
+       hexNum1:="00110011";      
      elsif midNum1= "0100"  then--4
-       hexNum1:="00110100";
-       
+       hexNum1:="00110100";       
      elsif midNum1= "0101"  then--5
-       hexNum1:="00110101";
-      
+       hexNum1:="00110101";      
      elsif midNum1= "0110"  then--6
-       hexNum1:="00110110"; 
-       
+       hexNum1:="00110110";       
      elsif midNum1= "0111"  then--7
-       hexNum1:="00110111";
-       
+       hexNum1:="00110111";      
      elsif midNum1= "1000"  then--8
-       hexNum1:="00110110";
-       
+       hexNum1:="00110110";      
      elsif midNum1= "1001"  then--9
-       hexNum1:="00111001";
-      
+       hexNum1:="00111001";     
      elsif midNum1= "1010"  then--A
-       hexNum1:="01000001";
-     
+       hexNum1:="01000001";   
      elsif midNum1= "1011"  then--B
        hexNum1:="01000010"; 
- 
      elsif midNum1= "1100"  then--C
-       hexNum1:="01000011"; 
- 
+       hexNum1:="01000011";  
      elsif midNum1= "1101"  then--D
        hexNum1:="01000100";
- 
      elsif midNum1= "1110"  then--E
-       hexNum1:="01000101";       
- 
+       hexNum1:="01000101";        
      elsif midNum1= "1111"  then--F
        hexNum1:="01000110";      
        
@@ -162,9 +131,7 @@ architecture dataflow of cmdProcessor is
   
  begin
 
-  numWords_bcdtest(0) <= "0000" ;-------set initial value to test
-  numWords_bcdtest(1) <= "0000" ;
-  numWords_bcdtest(2) <= "0000" ;  
+
   
   combi_nextState: process(currentState, rxData)
   begin
@@ -181,14 +148,14 @@ architecture dataflow of cmdProcessor is
               nextState <= S4_NUM;
         
         elsif rxData= "01010000" or rxdata="01110000" THEN-----P/p
-          if  numWords_bcdtest(0) = "0000" and numWords_bcdtest(1) = "0000" and numWords_bcdtest(2) = "0000" THEN
-              nextState <= S0_INIT;---if numwords are still contain three initial value means that we enter P/p before we run aNNN,
-          else                     ---so the command should be rejected.     
+          if  ifANNN = 0  THEN
+              nextState <= S0_INIT;---if ifANNN=0 means that we enter P/p before we run aNNN,so the command should be rejected.
+          else                          
               nextState <= S2_PEAK;
           end if;
          
         ELSIF rxData="01001100" or rxdata="01101100" THEN ------L/l
-          if  numWords_bcdtest(0) = "0000" and numWords_bcdtest(1) = "0000" and numWords_bcdtest(2) = "0000" THEN
+          if  ifANNN =0  THEN
               nextState <= S0_INIT;---same as P/p
           else   
               nextState <=S3_LIST;
