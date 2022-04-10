@@ -24,7 +24,7 @@ architecture dataConsume_state OF dataConsume IS
   TYPE state_type IS(init, first, second, third, fourth, fifth);--define state 
   SIGNAL init,first,second,third,fourth,fifth:state_type;--Signal of the state
   SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done:std_logic;  --erase the COUNTER and comparetor during each cycle.
-  SIGNAL ctrlOut_detected, ctrlIn_detected,ctrlOut_reg:std_logic;
+  SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic;
   SIGNAL data:std_vector(7 downto 0);--data from data generator.
   SIGNAL ctrlIn_delayed, ctrlIn_detected,ctrlOut_reg:std_logic;
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
@@ -36,23 +36,22 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL DATAREADY : std_logic;
   SIGNAL Controlforindex, Controlforcomplete : std_logic;
 BEGIN 
-
+ctrlOut <= ctrlOut_reg
 ctrlIn_detected = ctrl_In xor ctrlIn_delayed
-combi_nextState:process(curState, start, reset, ctrlOut_detected,DATAREADY, Controlforindex, Controlforcomplete)
+combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Controlforindex, Controlforcomplete)
   BEGIN 
     CASE curState IS 
       WHEN init => -- Wait for start signal
+        ctrlOut_reg ='0'
         IF start = '1' THEN
           nextState => first;
         ELSE
           nextState => init;
         END IF
-      WHEN first => --Wait for ctrl1 and ctrl2
-        ctrlOut_detected = ctrl_Out xor ctrlOut_reg
-        IF reset= '0' and ctrlOut_detected='1' THEN
-          ctrlIn_delayed = not ctrlIn_delayed
+      WHEN first => --Send ctrl1 and wait for ctrl2
+        IF reset= '0' and ctrlIn_detected='1' THEN
           nextState => second;
-        ElSIF reset = '0' and ctrlOut_detected='0' THEN
+        ElSIF reset = '0' and ctrlIn_detected='0' THEN
           nextState => first;
         ELSE
           nextState => init;
@@ -63,7 +62,7 @@ combi_nextState:process(curState, start, reset, ctrlOut_detected,DATAREADY, Cont
         Else
           nextState => second;
         END IF
-      WHEN third =>  --Wait for index signal, and convert hexadecimal to decimal
+      WHEN third =>  --Wait for index signal
         IF Controlforindex ='1' THEN
           nextState => fourth;
         Else 
@@ -84,12 +83,17 @@ combi_nextState:process(curState, start, reset, ctrlOut_detected,DATAREADY, Cont
           
   END process;
 
-delay_CtrlOut: process(clk)     
+Handshakeprotocol: process(clk)     
   begin
-    if rising_edge(clk) then
-      ctrlOut_reg <= ctrlOut;
+    IF rising_edge(clk) THEN
+      ctrlIn_delayed <= ctrlIn
+      IF curState = first THEN
+        ctrlOut_reg <= NOT ctrlOut_reg
+      ELSE
+        ctrlOut_reg <= ctrlOut_reg 
     END if;
   END process;
+
 
 Control_signal :process (curstate)
   begin
@@ -117,7 +121,7 @@ STAGE_RESET ：process (curState)
   begin
     IF reset ='1' THEN
       curState <= INIT
-    ELSIF rising_edge (clk) THEN
+    ELSIF rising_edge (clk) and reset='0' THEN
       curState <= nextState  
     END IF;
   END process;
