@@ -77,11 +77,12 @@ combi_nextState:process(curState, start, reset, ctrlOut_detected,DATAREADY, Cont
         END IF
       When fifth => --complete
         nextState => init; 
+
       When others =>
         nextState => init;
+    END CASE;
           
-          
-END process;
+  END process;
 
 delay_CtrlOut: process(clk)     
   begin
@@ -92,14 +93,12 @@ delay_CtrlOut: process(clk)
 
 Control_signal :process (curstate)
   begin
-    reset = '0'
-    start = '0'
     DATAREADY ='0'
-    index ='0'
-    index_peak='0'
-    ctrlOut ='0'
     COUNTER_reset='0'
     compare_reset='0'
+    COUNTER_done='0'
+    SHIFTER_prefix_done='0'
+    COMPARATOR_done='0'
     Controlforindex='0'
     controlforcomplete ='0'
 
@@ -111,7 +110,17 @@ Control_signal :process (curstate)
         ctrlOut ='1'
       When fifth =>
         reset='1'
-      
+    END CASE;
+  END process;
+
+STAGE_RESET ：process (curState)
+  begin
+    IF reset ='1' THEN
+      curState <= INIT
+    ELSIF rising_edge (clk) THEN
+      curState <= nextState  
+    END IF;
+  END process;
 ----------------------------------------------------
 
 COUNTER_process:process(data,reset)--TO calculate the index and compare the peak value. 
