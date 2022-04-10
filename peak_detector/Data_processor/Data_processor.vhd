@@ -35,7 +35,9 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL index, index_peak:integer;--记位置
   SIGNAL DATAREADY : std_logic;
   SIGNAL Controlforindex, Controlforcomplete : std_logic;
+  SIGNAL valueofnumwords : integer 0 to 999 --integer value of numWords_BCD
 BEGIN 
+valueofnumwords = --transfer BCD to integer
 ctrlOut <= ctrlOut_reg
 ctrlIn_detected = ctrl_In xor ctrlIn_delayed
 combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Controlforindex, Controlforcomplete)
@@ -56,27 +58,22 @@ combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Contr
         ELSE
           nextState => init;
         END IF
-      WHEN second => --Wait for dataready signal
-        IF DATAREADY = '1' THEN
-          nextState => third;
-        Else
-          nextState => second;
-        END IF
-      WHEN third =>  --Wait for index signal
-        IF Controlforindex ='1' THEN
+      WHEN second => --Set dataready signal high and give byte
+        nextState => third
+      WHEN third =>  --stage to see if counter 
+        IF COUNTER = valueofnumwords THEN --All bytes has been counted.
           nextState => fourth;
         Else 
-          nextState => third;
+          nextState => first;--Not all bytes counted, go back to first stage and step to next byte
         END IF
-      WHEN fourth => --wait for complete signal
-        IF Controlforcomplete ='1' THEN
+      WHEN fourth => --All bytes counter, transfer all signal to cmd, then step to seqdone.
+        IF Comparator_done ='1' and SHIFTER_prefix_done ='1' THEN --wait for shifter and comparator
           nextState => fifth;
         Else
           nextState => fourth;
         END IF
-      When fifth => --complete
+      When fifth => --complete, give seqDone high signal
         nextState => init; 
-
       When others =>
         nextState => init;
     END CASE;
@@ -101,8 +98,6 @@ Control_signal :process (curstate)
     COUNTER_reset='0'
     compare_reset='0'
     COUNTER_done='0'
-    SHIFTER_prefix_done='0'
-    COMPARATOR_done='0'
     Controlforindex='0'
     controlforcomplete ='0'
 
@@ -112,8 +107,18 @@ Control_signal :process (curstate)
         compare_reset ='1'
       When first =>
         ctrlOut ='1'
+      when second =>
+        DATAREADY ='1'
+        byte <= data
+      when third =>
+        DATAREADY ='0'
+      when fourth =>
+        COUNTER_done ='1'
       When fifth =>
+        Seqdone ='1'
         reset='1'
+        dataResults <= finnal_result
+        
     END CASE;
   END process;
 
