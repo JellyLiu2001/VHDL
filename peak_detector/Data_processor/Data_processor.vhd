@@ -1,9 +1,9 @@
-library ieee;
+library ieee;--import basic library
 use ieee.std_logic_1164.all;
 use work.common_pack.all;
 use ieee.numeric_std.all;
 
-  ENTITY dataConsume is
+  ENTITY dataConsume is --Define the input and output port.
     port (
       clk: in std_logic;
       reset: in std_logic; -- synchronous reset
@@ -21,18 +21,14 @@ use ieee.numeric_std.all;
   END dataConsume;
 
 architecture dataConsume_state OF dataConsume IS 
-  TYPE state_type IS(init, first, second, third, fourth, fifth);
-  SIGNAL init,first,second,third,fourth,fifth:state_type;--状态
-  SIGNAL counter_reset,compare_reset:std_logic;  --清空
-<<<<<<< HEAD
+  TYPE state_type IS(init, first, second, third, fourth, fifth);--define state 
+  SIGNAL init,first,second,third,fourth,fifth:state_type;--Signal of the state
+  SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done:std_logic;  --erase the COUNTER and comparetor during each cycle.
   SIGNAL ctrlOut_detected, ctrlIn_detected,ctrlOut_reg:std_logic;
-  SIGNAL data:std_vector(7 downto 0);--传来的数据
-=======
+  SIGNAL data:std_vector(7 downto 0);--data from data generator.
   SIGNAL ctrlIn_delayed, ctrlIn_detected,ctrlOut_reg:std_logic;
->>>>>>> 528ca583c1f52c2315f52c672cd55227f3b3920f
-  SIGNAL peak:std_logic;--最大数
-  SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);
-  SIGNAL COUNTER : integer:=0;--计数器
+  SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
+  SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
   SIGNAL prefix:char_array_type(0 TO 2);--记peak前三位
   signal suffix:char_array_type(0 to 3);--记peak和三位
   SIGNAL finnal_result:char_array_type(0 TO 7);--记全部
@@ -85,14 +81,14 @@ combi_nextState:process(curState, start, reset, ctrlOut_detected,DATAREADY, Cont
         nextState => init;
           
           
-END PROCESS;
+END process;
 
 delay_CtrlOut: process(clk)     
   begin
     if rising_edge(clk) then
       ctrlOut_reg <= ctrlOut;
-    end if;
-  end process;
+    END if;
+  END process;
 
 Control_signal :process (curstate)
   begin
@@ -101,16 +97,15 @@ Control_signal :process (curstate)
     DATAREADY ='0'
     index ='0'
     index_peak='0'
-    peak ='0'
     ctrlOut ='0'
-    counter_reset='0'
+    COUNTER_reset='0'
     compare_reset='0'
     Controlforindex='0'
     controlforcomplete ='0'
 
     CASE curstate is
       WHEN init =>
-        counter_reset ='1'
+        COUNTER_reset ='1'
         compare_reset ='1'
       When first =>
         ctrlOut ='1'
@@ -121,12 +116,13 @@ Control_signal :process (curstate)
 
 COUNTER_process:process(data,reset)--TO calculate the index and compare the peak value. 
 BEGIN
-  IF counter_reset='1' THEN
+  IF COUNTER_reset='1' THEN
       COUNTER<=0;
   ELSIF rising_edge(clk) THEN
       COUNTER = COUNTER + 1;
+      COUNTER_done='1';--!
   END IF;
-END PROCESS;  
+END process;  
 
 ----------------------------------------------------
 
@@ -135,42 +131,43 @@ BEGIN
 IF rising_edge(clk) and ctrlIn_detected='1' THEN
     for i in 0 TO 2 loop
       prefix(i)<=prefix(i+1);
-    end loop;
+    END loop;
       prefix(3)<=data;
-END PROCESS;
+      SHIFTER_prefix_done='1';--!
+END process;
 
 ----------------------------------------------------
 
-COMPARATOR_process:process(clk,counter)--比较
+COMPARATOR_process:process(clk,COUNTER)--比较
 BEGIN
-IF compare_reset='1' or curstate= start THEN--清除(curstate 应该是init)
-  index_peak<="0";---
+IF compare_reset='1' or curstate= start THEN--清零(curstate 应该是init)
+  index_peak<="0";
 END IF;
 
 ELSIF rising_edge(clk) THEN
     IF data > prefix(3) THEN
-      index_peak<=counter;
+      index_peak<=COUNTER;
+      COMPARATOR_done='1';--!
     END IF;
-
 END IF;
-END PROCESS;
+END process;
 
 ----------------------------------------------------
 
-SHIFTER_suffix:process(counter,index_peak) --存后四位
+SHIFTER_suffix:process(COUNTER,index_peak) --存后四位
 BEGIN
-if counter-index_peak=0 then
+if COUNTER-index_peak=0 then
   suffix(0)<=data;
-elsif counter-index_peak=1 then
+elsif COUNTER-index_peak=1 then
   suffix(1)<=data;
-elsif counter-index_peak=2 then
+elsif COUNTER-index_peak=2 then
   suffix(2)<=data;
-elsif counter-index_peak=3 then
+elsif COUNTER-index_peak=3 then
   suffix(3)<=data;
   finnal_result(0 to 2)<=prefix;--全部的7位
   finnal_result(3 to 6)<=suffix;
-end if;
-END PROCESS;
+END if;
+END process;
 
 ----------------------------------------------------
 
@@ -179,6 +176,6 @@ BEGIN
 MAXindex_BCD(2)<=std_logic_vector(to_unsigned(index_peak/100 mod 10,numWords_bcd(0)'length));
 MAXindex_BCD(1)<=std_logic_vector(to_unsigned(index_peak/10 mod 10,numWords_bcd(0)'length));
 MAXindex_BCD(0)<=std_logic_vector(to_unsigned(index_peak/1 mod 10,numWords_bcd(0)'length));
-END PROCESS;
+END process;
 
 ----------------------------------------------------
