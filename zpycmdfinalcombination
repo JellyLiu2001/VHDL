@@ -44,6 +44,7 @@ architecture dataflow of cmdProc is
     signal  maxIndexR:  BCD_ARRAY_TYPE(2 downto 0);
     signal encount2, counterRST2:std_logic;-----counternum signal
     signal  R,register2:std_logic_vector(11 downto 0);----signal used in register to save input
+    signal encounterPeak,encounterList : std_logic:='0';
     
     function BtoH1 (binaryNum:std_logic_vector (7 downto 0):="00000000") 
        return std_logic_vector is 
@@ -471,7 +472,7 @@ begin
               txnow <='0';            
             end if;           
           end if;
-         
+          encounterPeak<='1';
         
            
         elsif COUNT_PEAK = 2 and txdone='1' THEN-----output a space
@@ -480,7 +481,7 @@ begin
           if txdone = '1' THEN
             txnow <='0';
           end if;    
-          
+          encounterPeak<='1';
                   
         elsif COUNT_PEAK = 3 and txdone='1' THEN----first bit of maxindex
           txData(7 downto 4) <= "0011";
@@ -489,7 +490,7 @@ begin
           if txdone = '1' THEN
             txnow <='0';
           end if;
-        
+          encounterPeak<='1';
           
         elsif COUNT_PEAK = 4 and txdone='1' THEN----second bit of maxindex
           txData(7 downto 4) <= "0011";
@@ -498,7 +499,7 @@ begin
           if txdone = '1' THEN
             txnow <='0';
           end if;
-         
+          encounterPeak<='1';
         
         elsif COUNT_PEAK = 5 and txdone='1' THEN----third bit of maxindex
           txData(7 downto 4) <= "0011";
@@ -508,6 +509,7 @@ begin
             txnow <='0';
             resetPeak<='1';
           end if;
+          encounterPeak<='1';
         end if;
         
       when S3_LIST=>
@@ -554,7 +556,7 @@ begin
 		  IF resetPeak='1' THEN
 		    COUNT_PEAK <=0;
 		  ELSIF CLK'EVENT and CLK='1' THEN
-		    IF txdone='1' THEN
+		    IF encounterPeak='1' THEN
 		      COUNT_PEAK <= COUNT_PEAK +1;
 		    END IF;
 		  END IF;
@@ -565,7 +567,7 @@ begin
 		  IF resetList<='1' THEN
 		    COUNT_LIST <=0;
 		  ELSIF CLK'EVENT and CLK='1' THEN
-		    IF txdone='1' THEN
+		    IF encounterPeak='1' THEN
 		      COUNT_LIST <= COUNT_LIST +1;
 
 		    END IF;
@@ -634,4 +636,5 @@ END dataflow;
 
 
     
+
 
