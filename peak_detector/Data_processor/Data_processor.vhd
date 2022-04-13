@@ -37,7 +37,7 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL Controlforindex, Controlforcomplete : std_logic;
   SIGNAL valueofnumwords : integer 0 to 999 --integer value of numWords_BCD
 BEGIN 
-valueofnumwords = --transfer BCD to integer
+valueofnumwords = TO_INTEGER(unsigned(numWords_bcd(0))) + TO_INTEGER(unsigned(numWords_bcd(1))) *10 + TO_INTEGER(unsigned(numWords_bcd(2))) * 100--transfer BCD to integer
 ctrlOut <= ctrlOut_reg
 ctrlIn_detected = ctrl_In xor ctrlIn_delayed
 combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Controlforindex, Controlforcomplete)
@@ -67,7 +67,7 @@ combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Contr
           nextState => first;--Not all bytes counted, go back to first stage and step to next byte
         END IF
       WHEN fourth => --All bytes counter, transfer all signal to cmd, then step to seqdone.
-        IF Comparator_done ='1' and SHIFTER_prefix_done ='1' THEN --wait for shifter and comparator
+        IF Comparator_done ='1' and SHIFTER_prefix_done ='1' THEN --wait for shifter and comparator (???)
           nextState => fifth;
         Else
           nextState => fourth;
@@ -75,7 +75,7 @@ combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Contr
       When fifth => --complete, give seqDone high signal
         nextState => init; 
       When others =>
-        nextState => init;
+        nextState => init;   
     END CASE;
           
   END process;
