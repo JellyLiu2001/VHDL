@@ -5,7 +5,7 @@ Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
 -- Loading package std_logic_1164
 -- Compiling package common_pack
 
-} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd {0 {vcom -work work -2002 -explicit -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd
+} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\dataGen.vhd}
 Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -13,46 +13,8 @@ Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
 -- Loading package common_pack
 -- Compiling entity dataGen
 -- Compiling architecture behav of dataGen
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(16): near "*": syntax error
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(24): Illegal target for signal assignment.
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(24): (vcom-1136) Unknown identifier "ctrlIn_delayed".
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(28): Illegal target for signal assignment.
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(28): (vcom-1136) Unknown identifier "ctrlIn_delayed".
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(28): (vcom-1136) Unknown identifier "ctrlIn_detected".
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(35): Illegal target for signal assignment.
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(35): (vcom-1136) Unknown identifier "ctrlOut_reg".
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(37): (vcom-1136) Unknown identifier "ctrlIn_detected".
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(37): Type error resolving infix expression "=" as type std.STANDARD.BOOLEAN.
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(38): Illegal target for signal assignment.
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(38): (vcom-1136) Unknown identifier "ctrlOut_reg".
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(38): (vcom-1136) Unknown identifier "ctrlOut_reg".
-** Error: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(50): (vcom-1136) Unknown identifier "ctrlOut_reg".
-** Note: C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd(51): VHDL Compiler exiting
 
-} {9.0 23.0} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/Data_processor.vhd {0 {vcom -work work -2002 -explicit -stats=none {C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd}
-Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package common_pack
--- Loading package NUMERIC_STD
--- Compiling entity dataConsume
--- Compiling architecture dataConsume_state of dataConsume
-** Error: C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(28): (vcom-1136) Unknown identifier "std_vector".
-** Error: C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(28): (vcom-1294) Declaration with designator "data" already exists in this region.
-** =====> Prior declaration of "data" is at C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(14).
-** Error: C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(29): (vcom-1294) Declaration with designator "ctrlIn_delayed" already exists in this region.
-** =====> Prior declaration of "ctrlIn_delayed" is at C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(27).
-** Error: C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(29): (vcom-1294) Declaration with designator "ctrlIn_detected" already exists in this region.
-** =====> Prior declaration of "ctrlIn_detected" is at C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(27).
-** Error: C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(29): (vcom-1294) Declaration with designator "ctrlOut_reg" already exists in this region.
-** =====> Prior declaration of "ctrlOut_reg" is at C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(27).
-** Error: C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(36): (vcom-1294) Declaration with designator "DATAREADY" already exists in this region.
-** =====> Prior declaration of "dataReady" is at C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(15).
-** Error: C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(38): near "0": (vcom-1576) expecting ';'.
-** Error: C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(40): near "=": (vcom-1576) expecting == or '+' or '-' or '&'.
-
-} {10.0 12.0 13.0 14.0 15.0 16.0 17.0 18.0 19.0 20.0 21.0 23.0} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/tb_CmdProcessor.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/tb_CmdProcessor.vhd
+} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/tb_CmdProcessor.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\tb_CmdProcessor.vhd}
 Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
 -- Loading package STANDARD
 -- Loading package TEXTIO
@@ -61,5 +23,16 @@ Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
 -- Loading package common_pack
 -- Compiling entity tb_cmdProc_interim
 -- Compiling architecture testbench of tb_cmdProc_interim
+
+} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/Data_processor.vhd {2 {vcom -work work -2002 -explicit -stats=none {C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd}
+Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package common_pack
+-- Loading package NUMERIC_STD
+-- Compiling entity dataConsume
+-- Compiling architecture dataConsume_state of dataConsume
+** Warning: C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(167): (vcom-1152) Index value 3 is out of index range 0 to 2 of work.common_pack.CHAR_ARRAY_TYPE.
 
 } {} {}}

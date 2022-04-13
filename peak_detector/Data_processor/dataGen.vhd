@@ -13,7 +13,7 @@ entity dataGen is
 end dataGen;
 
 architecture behav of dataGen is
-  *
+  
   signal ctrlIn_delayed, ctrlIn_detected, ctrlOut_reg: std_logic;
   signal index: integer range 0 to SEQ_LENGTH;
 begin

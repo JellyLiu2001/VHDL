@@ -22,59 +22,59 @@ use ieee.numeric_std.all;
 
 architecture dataConsume_state OF dataConsume IS 
   TYPE state_type IS(init, first, second, third, fourth, fifth);--define state 
- -- SIGNAL init,first,second,third,fourth,fifth:state_type;--SIGNAL of the state
+ --SIGNAL init,first,second,third,fourth,fifth:state_type;--SIGNAL of the state
   SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done:std_logic;  --erase the COUNTER and comparetor during each cycle.
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic;
-  SIGNAL ctrlIn_delayed, ctrlIn_detected,ctrlOut_reg:std_logic;
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
   SIGNAL prefix:char_array_type(0 TO 2);--记peak前三位
   SIGNAL suffix:char_array_type(0 to 3);--记peak和三位
   SIGNAL finnal_result:char_array_type(0 TO 6);--记全部
   SIGNAL index, index_peak:integer;--记位置
-  SIGNAL DATAREADY : std_logic;
-  SIGNAL Controlforindex, Controlforcomplete : std_logic;
-  SIGNAL valueofnumwords : integer 0 to 999; --integer value of numWords_BCD
+  SIGNAL DATA_READY : std_logic;
+  SIGNAL curstate, nextstate:state_type; 
+--  SIGNAL Controlforindex, Controlforcomplete : std_logic;
+  SIGNAL valueofnumwords: integer range 0 to 999; --integer value of numWords_BCD
 BEGIN 
-valueofnumwords = TO_INTEGER(unsigned(numWords_bcd(0))) + TO_INTEGER(unsigned(numWords_bcd(1))) *10 + TO_INTEGER(unsigned(numWords_bcd(2))) * 100--transfer BCD to integer
-ctrlOut <= ctrlOut_reg
-ctrlIn_detected = ctrl_In xor ctrlIn_delayed
+valueofnumwords <= TO_INTEGER(unsigned(numWords_bcd(0))) + TO_INTEGER(unsigned(numWords_bcd(1))) *10 + TO_INTEGER(unsigned(numWords_bcd(2))) * 100;--transfer BCD to integer
+ctrlOut <= ctrlOut_reg;
+ctrlIn_detected <= ctrlIn xor ctrlIn_delayed;
 combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Comparator_done)
   BEGIN 
     CASE curState IS 
       WHEN init => -- Wait for start SIGNAL
-        ctrlOut_reg ='0'
+        ctrlOut_reg <='0';
         IF start = '1' THEN
-          nextState => first;
+          nextState <= first;
         ELSE
-          nextState => init;
-        END IF
+          nextState <= init;
+        END IF;
       WHEN first => --Send ctrl1 and wait for ctrl2
         IF reset= '0' and ctrlIn_detected='1' THEN
-          nextState => second;
+          nextState <= second;
         ElSIF reset = '0' and ctrlIn_detected='0' THEN
-          nextState => first;
+          nextState <= first;
         ELSE
-          nextState => init;
-        END IF
+          nextState <= init;
+        END IF;
       WHEN second => --Set dataready SIGNAL high and give byte
-        nextState => third
+        nextState <= third;
       WHEN third =>  --stage to see if counter 
         IF COUNTER = valueofnumwords THEN --All bytes has been counted.
-          nextState => fourth;
+          nextState <= fourth;
         Else 
-          nextState => first;--Not all bytes counted, go back to first stage and step to next byte
-        END IF
+          nextState <= first;--Not all bytes counted, go back to first stage and step to next byte
+        END IF;
       WHEN fourth => --All bytes counter, transfer all SIGNAL to cmd, then step to seqdone.
         IF Comparator_done ='1' THEN --wait for shifter and comparator
-          nextState => fifth;
+          nextState <= fifth;
         Else
-          nextState => fourth;
-        END IF
+          nextState <= fourth;
+        END IF;
       When fifth => --complete, give seqDone high SIGNAL
-        nextState => init; 
+        nextState <= init; 
       When others =>
-        nextState => init;   
+        nextState <= init;   
     END CASE;
           
   END process;
@@ -82,52 +82,53 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
 Handshakeprotocol: process(clk)     
   begin
     IF rising_edge(clk) THEN
-      ctrlIn_delayed <= ctrlIn
+      ctrlIn_delayed <= ctrlIn;
       IF curState = first THEN
-        ctrlOut_reg <= NOT ctrlOut_reg
+        ctrlOut_reg <= NOT ctrlOut_reg;
       ELSE
-        ctrlOut_reg <= ctrlOut_reg 
+        ctrlOut_reg <= ctrlOut_reg ;
+      END IF;
     END if;
   END process;
 
 
 Control_SIGNAL :process (curstate)
   begin
-    DATAREADY ='0'
-    COUNTER_reset='0'
-    compare_reset='0'
-    COUNTER_done='0'
+    DATA_READY <='0';
+    COUNTER_reset<='0';
+    compare_reset<='0';
+    COUNTER_done<='0';
     
 
     CASE curstate is
       WHEN init =>
-        COUNTER_reset ='1'
-        compare_reset ='1'
+        COUNTER_reset<='1';
+        compare_reset<='1';
       When first =>
-        ctrlOut ='1'
+        ctrlOut <='1';
       when second =>
-        DATAREADY ='1'
-        byte <= data
+        DATA_READY<='1';
+        dataready<=DATA_READY;
+        byte <= data;
       when third =>
-        DATAREADY ='0'
+        DATA_READY <='0';
       when fourth =>
-        COUNTER_done ='1'
+        COUNTER_done <='1';
       When fifth =>
-        Seqdone ='1'
-        reset='1'
-        COUNTER_reset='1'
-        Compare_reset='1'
-        dataResults <= finnal_result
-        maxIndex <= MAXindex_BCD
+        Seqdone <='1';
+        COUNTER_reset<='1';
+        Compare_reset<='1';
+        dataResults <= finnal_result;
+        maxIndex <= MAXindex_BCD;
     END CASE;
   END process;
 
 STAGE_RESET:process (curState)
   begin
     IF reset ='1' THEN
-      curState <= INIT
+      curState <= INIT;
     ELSIF rising_edge (clk) and reset='0' THEN
-      curState <= nextState  
+      curState <= nextState  ;
     END IF;
   END process;
 ----------------------------------------------------
@@ -137,8 +138,8 @@ BEGIN
   IF COUNTER_reset='1' THEN
       COUNTER<=0;
   ELSIF rising_edge(clk) THEN
-      COUNTER = COUNTER + 1;
-      COUNTER_done='1';--!总结写
+      COUNTER <= COUNTER + 1;
+      COUNTER_done<='1';--!总结写
   END IF;
 END process;  
 
@@ -150,22 +151,22 @@ IF rising_edge(clk) and ctrlIn_detected='1' THEN
     for i in 0 TO 2 loop--3位循环
       prefix(i)<=prefix(i+1);
     END loop;
-      prefix(3)<=data;
-      SHIFTER_prefix_done='1';--!
+      prefix(2)<=data;--peak
+      SHIFTER_prefix_done<='1';--!
+END IF;
 END process;
 
 ----------------------------------------------------
 
-COMPARATOR_process:process(clk,COUNTER)--比较
+COMPARATOR_process:process(data_ready,COUNTER)--比较
 BEGIN
-IF compare_reset='1' or curstate= start THEN--清零(curstate 应该是init)
-  index_peak<="0";
-END IF;
+IF compare_reset='1' or curstate= init THEN--清零(curstate 应该是init)
+  index_peak<=0;
 
 ELSIF rising_edge(clk) THEN
     IF data > prefix(3) THEN--选择最大的值
       index_peak<=COUNTER;
-      COMPARATOR_done='1';--!
+      COMPARATOR_done<='1';--!
     END IF;
 END IF;
 END process;
@@ -189,10 +190,10 @@ END process;
 
 ----------------------------------------------------
 
-maxindex:process(index_peak) --integer输出bcd
+maxindex_conversion:process(index_peak) --integer输出bcd
 BEGIN
 MAXindex_BCD(2)<=std_logic_vector(to_unsigned(index_peak/100 mod 10,numWords_bcd(0)'length));
 MAXindex_BCD(1)<=std_logic_vector(to_unsigned(index_peak/10 mod 10,numWords_bcd(0)'length));
 MAXindex_BCD(0)<=std_logic_vector(to_unsigned(index_peak/1 mod 10,numWords_bcd(0)'length));
 END process;
-----------------------------------------------------
+END dataConsume_state;
