@@ -25,7 +25,6 @@ architecture dataConsume_state OF dataConsume IS
  -- SIGNAL init,first,second,third,fourth,fifth:state_type;--SIGNAL of the state
   SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done:std_logic;  --erase the COUNTER and comparetor during each cycle.
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic;
-  SIGNAL data_gen:std_vector(7 downto 0);--data from data generator. 需要改名称~~~~~~~~~
   SIGNAL ctrlIn_delayed, ctrlIn_detected,ctrlOut_reg:std_logic;
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
@@ -37,7 +36,7 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL Controlforindex, Controlforcomplete : std_logic;
   SIGNAL valueofnumwords : integer 0 to 999; --integer value of numWords_BCD
 BEGIN 
-valueofnumwords = --transfer BCD to integer
+valueofnumwords = TO_INTEGER(unsigned(numWords_bcd(0))) + TO_INTEGER(unsigned(numWords_bcd(1))) *10 + TO_INTEGER(unsigned(numWords_bcd(2))) * 100--transfer BCD to integer
 ctrlOut <= ctrlOut_reg
 ctrlIn_detected = ctrl_In xor ctrlIn_delayed
 combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Controlforindex, Controlforcomplete)
@@ -66,8 +65,13 @@ combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Contr
         Else 
           nextState => first;--Not all bytes counted, go back to first stage and step to next byte
         END IF
+<<<<<<< HEAD
       WHEN fourth => --All bytes counter, transfer all SIGNAL to cmd, then step to seqdone.
         IF Comparator_done ='1' and SHIFTER_prefix_done ='1' THEN --wait for shifter and comparator
+=======
+      WHEN fourth => --All bytes counter, transfer all signal to cmd, then step to seqdone.
+        IF Comparator_done ='1' and SHIFTER_prefix_done ='1' THEN --wait for shifter and comparator (???)
+>>>>>>> 477fd5df9070582a57d831463dcad1f4c46c8692
           nextState => fifth;
         Else
           nextState => fourth;
@@ -75,7 +79,7 @@ combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Contr
       When fifth => --complete, give seqDone high SIGNAL
         nextState => init; 
       When others =>
-        nextState => init;
+        nextState => init;   
     END CASE;
           
   END process;

@@ -1,0 +1,668 @@
+USE WORK.all;
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.all;
+USE IEEE.numeric_std.all;
+use work.common_pack.all;
+use IEEE.std_logic_unsigned.all;
+
+
+
+
+entity cmdProc is
+port (
+
+      clk: in std_logic;
+      reset: in std_logic;
+      rxnow: in std_logic;
+      rxData: in std_logic_vector (7 downto 0);
+      txData: out std_logic_vector (7 downto 0);
+      rxdone: out std_logic;
+      ovErr: in std_logic;
+      framErr: in std_logic;
+      txnow: out std_logic;
+      txdone: in std_logic;
+      start: out std_logic;
+      numWords_bcd: out BCD_ARRAY_TYPE(2 downto 0) ;
+      dataReady: in std_logic;
+      byte: in std_logic_vector(7 downto 0);
+      maxIndex: in BCD_ARRAY_TYPE(2 downto 0);
+      dataResults: in CHAR_ARRAY_TYPE(0 to 6);
+      seqDone: in std_logic
+    );
+ 
+end ;
+
+architecture dataflow of cmdProc is
+    type state_type is (S0_INIT , S1_RXDATA ,S2_PEAK,PEAK1,PEAK2,SPACE,INDEX1,INDEX2,INDEX3, S3_LIST,count_N,counter_RESET,counter_receive,transmition,check,GIVE_Num,Give_data,recieve_byte,Print_byte_one,recieve_byte_2,
+  Print_byte_two,recieve_space,print_space,print_last,undefined,stop_print,r_print,transmition_fail);
+    signal currentState, nextState: state_type;
+    SIGNAL COUNT_NUM: integer:=0;
+    SIGNAL COUNT_PEAK,COUNT_LIST: integer:=0;
+    signal ifANNN : std_logic:='0';
+    signal resetPeak,resetList: std_logic:='0';------reset signal 
+    signal dataResultsR:  CHAR_ARRAY_TYPE(0 to 6);
+    signal  maxIndexR:  BCD_ARRAY_TYPE(2 downto 0);
+    signal encount2, counterRST2:std_logic;-----counternum signal
+    signal  R,register2:std_logic_vector(11 downto 0);----signal used in register to save input
+    signal encounterPeak,encounterList : std_logic:='0';
+    
+    function BtoH1 (binaryNum:std_logic_vector (7 downto 0):="00000000") 
+       return std_logic_vector is 
+    variable hexNum1 : std_logic_vector(7 downto 0):="00000000"; 
+    variable midNum1 :  std_logic_vector(3 downto 0):="0000";
+    
+  begin
+     midNum1:= binaryNum(7 downto 4);
+     if midNum1="0000"   then--0
+       hexNum1:="00110000";     
+     elsif midNum1="0001"   then--1
+       hexNum1:="00110001";       
+     elsif midNum1= "0010"  then--2
+       hexNum1:="00110010";      
+     elsif midNum1= "0011" then--3
+       hexNum1:="00110011";       
+     elsif midNum1= "0100"  then--4
+       hexNum1:="00110100";       
+     elsif midNum1= "0101"  then--5
+       hexNum1:="00110101";      
+     elsif midNum1= "0110"  then--6
+       hexNum1:="00110110";        
+     elsif midNum1= "0111"  then--7
+       hexNum1:="00110111";       
+     elsif midNum1= "1000"  then--8
+       hexNum1:="00110110";       
+     elsif midNum1= "1001"  then--9
+       hexNum1:="00111001";      
+     elsif midNum1= "1010"  then--A
+       hexNum1:="01000001";     
+     elsif midNum1= "1011"  then--B
+       hexNum1:="01000010";  
+     elsif midNum1= "1100"  then--C
+       hexNum1:="01000011";  
+     elsif midNum1= "1101"  then--D
+       hexNum1:="01000100"; 
+     elsif midNum1= "1110"  then--E
+       hexNum1:="01000101";        
+     elsif midNum1= "1111"  then--F
+       hexNum1:="01000110";             
+     end if; 
+     return hexNum1;
+  end BtoH1;
+  
+  function BtoH2 (binaryNum:std_logic_vector (7 downto 0):="00000000") 
+       return std_logic_vector is 
+    variable hexNum1 : std_logic_vector(7 downto 0):="00000000"; 
+    variable midNum1 :  std_logic_vector(3 downto 0):="0000";
+    
+  begin
+     midNum1:= binaryNum(3 downto 0);
+     if midNum1="0000"   then--0
+       hexNum1:="00110000";       
+     elsif midNum1="0001"   then--1
+       hexNum1:="00110001";      
+     elsif midNum1= "0010"  then--2
+       hexNum1:="00110010";     
+     elsif midNum1= "0011" then--3
+       hexNum1:="00110011";      
+     elsif midNum1= "0100"  then--4
+       hexNum1:="00110100";       
+     elsif midNum1= "0101"  then--5
+       hexNum1:="00110101";      
+     elsif midNum1= "0110"  then--6
+       hexNum1:="00110110";       
+     elsif midNum1= "0111"  then--7
+       hexNum1:="00110111";      
+     elsif midNum1= "1000"  then--8
+       hexNum1:="00110110";      
+     elsif midNum1= "1001"  then--9
+       hexNum1:="00111001";     
+     elsif midNum1= "1010"  then--A
+       hexNum1:="01000001";   
+     elsif midNum1= "1011"  then--B
+       hexNum1:="01000010"; 
+     elsif midNum1= "1100"  then--C
+       hexNum1:="01000011";  
+     elsif midNum1= "1101"  then--D
+       hexNum1:="01000100";
+     elsif midNum1= "1110"  then--E
+       hexNum1:="01000101";        
+     elsif midNum1= "1111"  then--F
+       hexNum1:="01000110";      
+       
+     end if; 
+     return hexNum1;
+  end BtoH2;
+  
+begin
+  combi_nextState: process(currentState, rxNow, txdone, seqDone, dataReady)
+  begin
+    case currentState is
+      when S0_INIT =>
+       
+     
+        if rxnow='1' THEN
+          nextState <= S1_RXDATA;
+        else
+          nextState <= S0_INIT;------xiugai   111111
+        end if ;
+       
+      WHEN S1_RXDATA =>
+            if rxData="01000001" or rxData="01100001"  THEN-------A/a
+             
+                nextState <= transmition;
+            elsif rxData= "01010000" or rxdata="01110000" THEN-----P/p
+                                   
+              nextState <= S2_PEAK;
+         
+
+
+         
+            ELSIF rxData="01001100" or rxdata="01101100" THEN ------L/l
+           
+              nextState <=S3_LIST;
+            else
+               
+                nextState <= transmition_fail;------------------222222222
+           
+            end if;
+-------------------------------------------------------------------------------     
+     
+      WHEN  S2_PEAK =>
+          resetPeak <= '0' ;
+          nextState <= PEAK1;
+          
+      WHEN PEAK1=>
+          if txdone='1' then
+            nextState <= PEAK2;
+          end if;
+          
+      when PEAK2=>
+          if txdone='1' then
+            nextState <= SPACE;
+          end if;
+      
+      when SPACE=>
+          if txdone='1' then
+            nextState <= INDEX1;
+          end if;  
+          
+      when INDEX1=>
+          if txdone='1' then
+            nextState <= INDEX2;
+          end if;  
+          
+      when INDEX2=>
+          if txdone='1' then
+            nextState <= INDEX3;
+          end if;  
+          
+      when INDEX3=>
+          if txdone='1' then
+            nextState <= SO_INIT;
+          end if;  
+---------------------------------------------------------------------------------------         
+      WHEN  S3_LIST =>
+       
+          resetList<='0';
+          if COUNT_LIST=14 THEN---------when output 7 byte then return to inital state 
+            nextState <= S0_INIT;
+          end if;  
+----------------------------------------------------------------------------------------------          
+      When count_N =>
+     
+      if rxNow = '1' then
+       if rxData >="00110000" and rxData<="00111001" then------check 0-9
+            if COUNT_NUM = 0 then
+             R(11 downto 8) <= rxData(3 downto 0);
+            elsif COUNT_NUM =  1 then
+             R(7 downto 4) <= rxData(3 downto 0);
+            elsif COUNT_NUM = 2 then
+             R (3 downto 0) <= rxData(3 downto 0);
+            end if;
+         nextState <= counter_receive;
+        else  
+          nextState <=  counter_RESET;
+           
+        end if;
+      else
+        nextState <= count_N;
+      end if;
+       
+      WHEN counter_RESET =>
+         
+          nextState <= transmition;
+     
+      WHEN counter_receive =>
+          nextState <= transmition;
+     
+      WHEN transmition =>
+        if rxData="01000001" or rxData="01100001" then
+          nextState <= count_N;
+        else
+          nextState <= Check;
+        end if;
+         
+      WHEN check =>
+      IF  rxData >="00110000" and rxData<="00111001" then
+          if COUNT_NUM < 3 then
+            nextState <= count_N;
+          else ---------have contain aNNN
+            nextState <= GIVE_Num;
+          end if;
+      ELSE
+          nextState <= S0_INIT;
+      end if;
+ 
+      WHEN GIVE_Num =>
+            numWords_bcd(2) <= register2(11 downto 8);  
+   
+            numWords_bcd(1) <= Register2(7 downto 4);
+           
+            numWords_bcd(0) <= Register2(3 downto 0);
+           
+            nextState  <= Give_data;
+      When Give_data =>
+            nextState <= recieve_byte;
+     
+      When  recieve_byte =>
+          if dataReady ='1' then
+            if byte(7 downto 4) < "1010" then    ---------first 4 bits represents from 0-9
+                R(7 downto 4)<="0011";
+                R(3 downto 0) <= byte(7 downto 4);
+            else
+                 
+                R(7 downto 4) <="0100";
+                if byte(7 downto 4)= "1010" then ------10 hexA
+                  R(3 downto 0) <= "0001";
+                Elsif byte(7 downto 4)= "1011" then ---11B
+                  R(3 downto 0) <= "0010";
+                Elsif byte(7 downto 4)= "1100" then ----12C
+                  R(3 downto 0) <= "0011";
+                Elsif byte(7 downto 4)= "1101" then ----13D
+                  R(3 downto 0) <= "0100";
+                Elsif byte(7 downto 4)= "1110" then ----14E
+                  R(3 downto 0) <= "0101";  
+                Elsif byte(7 downto 4)= "1111" then ----15F
+                  R(3 downto 0) <= "0110";
+                end if;
+            end if;
+            nextState <= Print_byte_one;
+          else
+            nextState <= recieve_byte;
+          end if;
+     
+     
+      When Print_byte_one =>
+        if seqDone='1' then
+          nextState <= stop_print;
+        else
+       
+        nextState <= recieve_byte_2;
+     
+        end if;
+      When recieve_byte_2 =>
+        if txdone='1' then
+            if byte(3 downto 0) < "1010" then    ---------last 4 bits represents from 0-9
+                R(7 downto 4)<="0011";
+                R(3 downto 0) <= byte(3 downto 0);
+            else
+                 
+                R(7 downto 4) <="0100";
+                if byte(3 downto 0)= "1010" then ------10 hexA
+                  R(3 downto 0) <= "0001";
+                Elsif byte(3 downto 0)= "1011" then ---11B
+                  R(3 downto 0) <= "0010";
+                Elsif byte(3 downto 0)= "1100" then ----12C
+                  R(3 downto 0) <= "0011";
+                Elsif byte(3 downto 0)= "1101" then ----13D
+                  R(3 downto 0) <= "0100";
+                Elsif byte(3 downto 0)= "1110" then ----14E
+                  R(3 downto 0) <= "0101";  
+                Elsif byte(3 downto 0)= "1111" then ----15F
+                  R(3 downto 0) <= "0110";
+                end if;
+            end if;
+            nextState <= Print_byte_two;
+          else
+            nextState <= recieve_byte_2;
+          end if;
+     
+         
+       
+      When Print_byte_two =>
+       
+        nextState <= recieve_space;
+     
+      when recieve_space =>
+          if txdone ='1' then
+            R(7 downto 0)<= "00100000";
+            nextState <= print_space;
+          end if;
+      when print_space =>
+         nextState <= Give_data;
+       
+     
+      When print_last =>
+        if encount2 <='1' then
+         
+           nextState <= S0_INIT;
+        else
+           
+            nextState <= Give_data;
+        end if;
+      When undefined =>
+        nextState <=  S0_INIT;
+      WHEN stop_print =>
+     nextState <= r_print;
+  WHEN r_print =>
+    nextState <= S0_INIT;
+  WHEN transmition_fail =>
+    nextState <= S0_INIT;
+   
+      end case;    
+  end process;      
+  -----------------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+  -------------------------------------------------------------------
+  ---------------------------------------------------------------
+  --------------------------------------------------------
+  ---------------------------------------------------
+  ----------------------------------------------
+ 
+  combi_output:process(currentState)
+  begin
+  txnow<='0';
+  start <='0';
+  rxDone<='0';
+  encount2<='0';
+  counterRST2<='0';
+ 
+   
+    case currentState is
+      when S0_INIT =>
+        txNow<='0';
+        start <='0';
+        rxDone<='0';
+        encount2<='0';
+        counterRST2<='0';
+       
+      when S1_RXDATA=>
+       
+       
+         if rxData="01000001" or rxData="01100001"  THEN-------A/a
+              RxDone <='1' ;
+         else
+              RxDone <='1';
+         end if;
+           
+      When count_N =>
+        if rxNow = '1' then
+          if rxData >="00110000" and rxData<="00111001" then------check 0-9  
+              encount2<='1';
+              RxDone <='1';
+         
+         
+          end if;
+        end if;
+         
+         
+         
+     
+      WHEN counter_RESET =>
+            counterRST2 <='1';
+            RxDone <= '1';
+         
+           
+     
+      WHEN counter_receive =>
+            encount2 <='1';
+            RxDone <='1';
+     
+         
+     
+     
+      WHEN transmition =>
+         txData <= rxData;
+         txNow<='1';
+         
+      WHEN check =>
+          TxNow <='0';
+          RxDone <='0';
+         
+         
+      WHEN GIVE_Num =>  
+           counterRST2 <='1';-----succussfully have NNN reset the clk  
+           
+           
+      When Give_data =>
+            start <='1';
+     
+     
+      When  recieve_byte =>
+          start <='0';
+          txNow <='0';
+      When Print_byte_one =>
+        txData<= register2 (7 downto 0);
+        txNow<='1';      
+      When recieve_byte_2 =>
+          txNow <= '0' ;  
+      When Print_byte_two =>
+       
+        txData <= register2(7 downto 0);
+        txNow <='1';
+     
+      When recieve_space =>
+        if txDone='1' then
+          txNow <='0';
+        end if;
+     
+      when print_space =>
+         
+            txNow <='1';
+            txData<= "00100000";
+           
+       
+       
+      When print_last =>
+        if encount2 <='1' then
+          txData <= register2(7 downto 0);
+          txNow <='1';
+          counterRST2<='0';
+        else
+          txNow <='1';
+          txdata<="00100000";
+        end if;
+      When undefined =>
+        txnow<='0';
+        start <='0';
+        rxDone<='0';
+        encount2<='0';
+        counterRST2<='0';
+      WHEN stop_print =>
+         txData <= R(7 downto 0);
+         txNow <= '1';
+      WHEN r_print =>
+         txData <= "00001101"; -- /r symbol in ascii
+         txNow <= '1';
+      WHEN transmition_fail =>
+         txnow<='1';
+         txData <= rxData;
+      when S2_PEAK=>
+        if COUNT_PEAK = 0 and txdone='1' THEN----output peak value
+          txData <= BtoH1(dataResultsR(3));
+          txnow <='1';
+          if txdone = '1' THEN
+            txnow <='0'; 
+            txData <= BtoH2(dataResultsR(3));
+            txnow <='1';
+            if txdone = '1' THEN
+              txnow <='0';            
+            end if;           
+          end if;
+          encounterPeak<='1';
+        
+           
+        elsif COUNT_PEAK = 2 and txdone='1' THEN-----output a space
+          txData <= "00100000";
+          txnow <='1';
+          if txdone = '1' THEN
+            txnow <='0';
+          end if;    
+          encounterPeak<='1';
+                  
+        elsif COUNT_PEAK = 3 and txdone='1' THEN----first bit of maxindex
+          txData(7 downto 4) <= "0011";
+          txData(3 downto 0) <= maxIndexR(2);
+          txnow <='1';
+          if txdone = '1' THEN
+            txnow <='0';
+          end if;
+          encounterPeak<='1';
+          
+        elsif COUNT_PEAK = 4 and txdone='1' THEN----second bit of maxindex
+          txData(7 downto 4) <= "0011";
+          txData(3 downto 0) <= maxIndexR(1);
+          txnow <='1';
+          if txdone = '1' THEN
+            txnow <='0';
+          end if;
+          encounterPeak<='1';
+        
+        elsif COUNT_PEAK = 5 and txdone='1' THEN----third bit of maxindex
+          txData(7 downto 4) <= "0011";
+          txData(3 downto 0) <= maxIndexR(0);
+          txnow <='1';
+          if txdone = '1' THEN
+            txnow <='0';
+            resetPeak<='1';
+          end if;
+          encounterPeak<='1';
+        end if;
+        
+      when S3_LIST=>
+        
+          txData <= BtoH1(dataResultsR(COUNT_LIST/2));
+          txnow <='1';
+          if txdone = '1' THEN
+            txnow <='0'; 
+            txData <= BtoH2(dataResultsR((COUNT_LIST-1)/2));
+            txnow <='1';
+            if txdone = '1' THEN
+              txnow <='0';            
+            end if;           
+          end if;
+  
+     end case;
+  end process;    
+  -------------------------------------------------------------------
+  -------------------------------------------------------------
+  -----------------------------------------------
+  -------------------
+  COUNTER_NUM: PROCESS(reset, clk)
+
+  BEGIN
+
+    IF counterRST2 = '1' THEN  -- active high reset
+
+        COUNT_NUM <= 0;
+
+    ELSIF clk'EVENT and clk='1' THEN
+
+        IF encount2= '1' THEN              
+
+           COUNT_NUM <= COUNT_NUM + 1;
+
+        END IF;
+
+    END IF;
+
+  END PROCESS;
+ 
+  COUNTER_PEAK:PROCESS(RESET,CLK,txdone)
+		BEGIN
+		  IF resetPeak='1' THEN
+		    COUNT_PEAK <=0;
+		  ELSIF CLK'EVENT and CLK='1' THEN
+		    IF encounterPeak='1' THEN
+		      COUNT_PEAK <= COUNT_PEAK +1;
+		    END IF;
+		  END IF;
+		END PROCESS;
+       
+  COUNTER_LIST :PROCESS(RESET,CLK,txdone)
+		BEGIN
+		  IF resetList<='1' THEN
+		    COUNT_LIST <=0;
+		  ELSIF CLK'EVENT and CLK='1' THEN
+		    IF encounterPeak='1' THEN
+		      COUNT_LIST <= COUNT_LIST +1;
+
+		    END IF;
+		  END IF;
+		END PROCESS;
+
+  dataResultR_maxIndexR: process ( reset,seqDone)
+      BEGIN
+        if reset='1' then
+          dataResultsR(0) <= "00000000";
+          dataResultsR(1) <= "00000000";
+          dataResultsR(2) <= "00000000";
+          dataResultsR(3) <= "00000000";
+          dataResultsR(4) <= "00000000";
+          dataResultsR(5) <= "00000000";
+          dataResultsR(6) <= "00000000";
+      
+          maxIndexR(0) <= "0000";
+          maxIndexR(1) <= "0000";
+          maxIndexR(2) <= "0000";
+      
+        elsif seqDone = '1' then
+          dataResultsR <= dataResults;
+          maxIndexR <= maxIndex;
+      
+        end if;
+      end process;
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  register1: PROCESS (clk, R, register2)
+     BEGIN
+       IF clk'EVENT AND clk='1' THEN
+         register2 <= R;
+       END IF;
+     END PROCESS;
+ 
+         
+  IF_A: PROCESS (clk,seqDone)
+  BEGIN
+    if seqDone='1' then
+      ifANNN <='1';
+    elsif reset='0' then
+      ifANNN <='0';
+    end if;
+  end process;    
+ 
+ 
+       
+             
+  seq_state: PROCESS (CLK, reset)
+  BEGIN
+    IF reset = '1' THEN
+      currentState <= S0_INIT;
+    ELSIF CLK'EVENT AND CLK='1' THEN
+      currentState <= nextState;
+    END IF;
+  END PROCESS; -- seq  
+ 
+END dataflow;
+
+
+    
+
+
+
