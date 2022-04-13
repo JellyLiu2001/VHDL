@@ -37,8 +37,8 @@ architecture dataflow of cmdProc is
   Print_byte_two,recieve_space,print_space,print_last,undefined,stop_print,r_print,transmition_fail);
     signal currentState, nextState: state_type;
     SIGNAL COUNT_NUM: integer:=0;
-    SIGNAL COUNT_PEAK,COUNT_LIST: integer:=0;
-    signal ifANNN : std_logic:='0';
+    SIGNAL COUNT_LIST: integer:=0;
+    signal ifANNN : integer:=0;
     signal resetPeak,resetList: std_logic:='0';------reset signal 
     signal dataResultsR:  CHAR_ARRAY_TYPE(0 to 6);
     signal  maxIndexR:  BCD_ARRAY_TYPE(2 downto 0);
@@ -152,15 +152,27 @@ begin
              
                 nextState <= transmition;
             elsif rxData= "01010000" or rxdata="01110000" THEN-----P/p
-                                   
-              nextState <= S2_PEAK;
+              if ifANNN > 0 then                    
+                nextState <= S2_PEAK;
+                
+              elsif ifANNN=0 then
+                nextState <= S0_INIT;
+                
+              end if;
          
 
 
          
             ELSIF rxData="01001100" or rxdata="01101100" THEN ------L/l
-           
-              nextState <=S3_LIST;
+              if ifANNN > 0 then
+                nextState <=S3_LIST;
+                
+              elsif ifANNN=0 then
+                nextState <= S0_INIT;
+                
+              end if;  
+                
+                
             else
                
                 nextState <= transmition_fail;------------------222222222
@@ -228,7 +240,7 @@ begin
          
       when S3_HOLD =>      --all the hold states are set to avoid the effect of delay of txDone response to the change in txNow which is 
         nextState <= List1;--one clk cycle.
-         
+        encounterList<='0'; 
         
       
       when List1=>  
@@ -237,6 +249,7 @@ begin
           end if;
        
       when List1_HOLD=>
+        
          nextState <= List2;  
          
       when List2=>  
@@ -249,15 +262,16 @@ begin
           
       when SPACEL=>
 
-          encounterList<='1';
-          nextState <= SPACEL_HOLD;
           
+          if txdone='1' then
+           nextState <= SPACEL_HOLD;
+          end if;
       when SPACEL_HOLD=>
-            encounterList<='0';
-           if COUNT_LIST < 7 then
+            encounterList<='1';
+           if COUNT_LIST < 6 then
             nextState <=S3_HOLD;
             
-          elsif COUNT_LIST = 7 then
+          elsif COUNT_LIST = 6 then
             nextState <= S0_INIT;
             resetList<='1';
             encounterList<='0';
@@ -717,14 +731,25 @@ begin
      END PROCESS;
  
          
-  IF_A: PROCESS (clk,seqDone)
+  IF_A: PROCESS(reset, clk,seqDone)
+
   BEGIN
-    if seqDone='1' then
-      ifANNN <='1';
-    elsif reset='0' then
-      ifANNN <='0';
-    end if;
-  end process;    
+
+    IF reset = '1' THEN  -- active high reset
+
+        ifANNN <= 0;
+
+    ELSIF clk'EVENT and clk='1' THEN
+
+        IF seqDone= '1' THEN              
+
+           ifANNN <= ifANNN + 1;
+
+        END IF;
+
+    END IF;
+
+  END PROCESS; 
  
  
        
@@ -742,6 +767,8 @@ END dataflow;
 
 
     
+
+
 
 
 
