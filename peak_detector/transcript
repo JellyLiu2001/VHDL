@@ -1,0 +1,49 @@
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd was successful with warnings.
+# 4 compiles, 0 failed with no errors. 
+vsim -voptargs=+acc work.tb_datagenconsume
+# vsim -voptargs=+acc work.tb_datagenconsume 
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# ** Error: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd(163): (vopt-1133) Type mismatch for port "start" in component "dataConsume" when binding to entity "dataConsume".
+# 
+# ** Error: O:/vhdl2/VHDL/peak_detector/dataConsume.vhd(23): Vopt Compiler exiting
+# Error loading design
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd was successful with warnings.
+# 4 compiles, 0 failed with no errors. 
+vsim -voptargs=+acc work.tb_datagenconsume
+# vsim -voptargs=+acc work.tb_datagenconsume 
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# ** Warning: [14] O:/vhdl2/VHDL/peak_detector/dataConsume.vhd(167): (vopt-1152) Index value 3 is out of index range 0 to 2 of work.common_pack.CHAR_ARRAY_TYPE.
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+add wave -position insertpoint  \
+sim:/tb_datagenconsume/curByte
+add wave -position insertpoint  \
+sim:/tb_datagenconsume/seqDone
+add wave sim:/tb_datagenconsume/dataConsume1/*
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+run
+# Causality operation skipped due to absense of debug database file

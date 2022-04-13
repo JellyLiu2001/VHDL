@@ -1,0 +1,30 @@
+# ** Error: (vish-42) Unsupported ModelSim library format for "O:/vhdl2/VHDL/peak_detector/Data_processor/work". (Format: 4)
+# Error opening C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd
+# Path name 'C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd' doesn't exist.
+# Error opening C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd
+# Path name 'C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd' doesn't exist.
+# Error opening C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/common_pack.vhd
+# Path name 'C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/common_pack.vhd' doesn't exist.
+# ** Error: (vish-42) Unsupported ModelSim library format for "O:/vhdl2/VHDL/peak_detector/Data_processor/work". (Format: 4)
+# Compile of Data_processor.vhd failed with 2 errors.
+# Compile of common_pack.vhd failed with 2 errors.
+# Compile of tb_dataConsume_signed.vhd failed with 2 errors.
+# 3 compiles, 3 failed with 6 errors. 
+# ** Error: (vish-42) Unsupported ModelSim library format for "O:/vhdl2/VHDL/peak_detector/Data_processor/work". (Format: 4)
+# Compile of Data_processor.vhd failed with 2 errors.
+# Compile of common_pack.vhd failed with 2 errors.
+# Compile of tb_dataConsume_signed.vhd failed with 2 errors.
+# 3 compiles, 3 failed with 6 errors. 
+# ** Error: (vish-42) Unsupported ModelSim library format for "O:/vhdl2/VHDL/peak_detector/Data_processor/work". (Format: 4)
+# Compile of Data_processor.vhd failed with 2 errors.
+# Compile of common_pack.vhd failed with 2 errors.
+# Compile of tb_dataConsume_signed.vhd failed with 2 errors.
+# Compile of dataGen.vhd failed with 2 errors.
+# 4 compiles, 4 failed with 8 errors. 
+# ** Error: (vish-42) Unsupported ModelSim library format for "O:/vhdl2/VHDL/peak_detector/Data_processor/work". (Format: 4)
+# Compile of Data_processor.vhd failed with 2 errors.
+# Compile of common_pack.vhd failed with 2 errors.
+# Compile of tb_dataConsume_signed.vhd failed with 2 errors.
+# Compile of dataGen.vhd failed with 2 errors.
+# 4 compiles, 4 failed with 8 errors. 
+# ** Error: (vish-42) Unsupported ModelSim library format for "O:/vhdl2/VHDL/peak_detector/Data_processor/work". (Format: 4)

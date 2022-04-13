@@ -1,0 +1,146 @@
+m255
+K3
+13
+cModel Technology
+dO:\vhdl2\VHDL\peak_detector\Data_processor
+T_opt
+VglSo[TBJ06S13K3NV>88]0
+04 17 4 work tb_datagenconsume test 1
+=1-e454e8647d48-6257111b-361-264c
+o-quiet -auto_acc_if_foreign -work work +acc
+n@_opt
+OL;O;10.1b;51
+Pcommon_pack
+Z0 DPx3 std 6 textio 0 22 5>J:;AW>W0[[dW0I6EN1Q0
+Z1 DPx4 ieee 14 std_logic_1164 0 22 5=aWaoGZSMWIcH0i^f`XF1
+Z2 w1649871963
+Z3 dO:\vhdl2\VHDL\peak_detector
+8O:/vhdl2/VHDL/peak_detector/common_pack.vhd
+FO:/vhdl2/VHDL/peak_detector/common_pack.vhd
+l0
+L4
+VLLGbjJTL0=1F=Q>9X4ENT3
+Z4 OL;C;10.1b;51
+32
+Z5 o-work work -2002 -explicit
+Z6 tExplicit 1
+!s100 YDXCjJYFPXaAT^U6RRbU<1
+!i10b 1
+!s108 1649873173.224000
+!s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|O:/vhdl2/VHDL/peak_detector/common_pack.vhd|
+!s107 O:/vhdl2/VHDL/peak_detector/common_pack.vhd|
+Edataconsume
+Z7 w1649873169
+Z8 DPx4 ieee 11 numeric_std 0 22 O3PF8EB`?j9=z7KT`fn941
+Z9 DPx4 work 11 common_pack 0 22 LLGbjJTL0=1F=Q>9X4ENT3
+Z10 DPx3 std 6 textio 0 22 5>J:;AW>W0[[dW0I6EN1Q0
+R1
+R3
+Z11 8O:/vhdl2/VHDL/peak_detector/dataConsume.vhd
+Z12 FO:/vhdl2/VHDL/peak_detector/dataConsume.vhd
+l0
+L6
+VcCV]:CM7>iY9`e:>c<6E63
+R4
+32
+Z13 !s108 1649873174.083000
+Z14 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|O:/vhdl2/VHDL/peak_detector/dataConsume.vhd|
+Z15 !s107 O:/vhdl2/VHDL/peak_detector/dataConsume.vhd|
+R5
+R6
+!s100 K`?Q1a2AHLAkdaV^iA?CE3
+!i10b 1
+Adataconsume_state
+R8
+R9
+R10
+R1
+DEx4 work 11 dataconsume 0 22 cCV]:CM7>iY9`e:>c<6E63
+l38
+L23
+VA]EQ]O?@I3BFC<;Y5TW=G0
+!s100 =SCQ2ak>9G>;^22X8dDZ33
+R4
+32
+R13
+R14
+R15
+R5
+R6
+!i10b 1
+Edatagen
+R2
+R9
+R10
+R1
+R3
+Z16 8O:/vhdl2/VHDL/peak_detector/dataGen.vhd
+Z17 FO:/vhdl2/VHDL/peak_detector/dataGen.vhd
+l0
+L5
+VJVamX@:1GQ_IV9[`IJNJM0
+R4
+32
+Z18 !s108 1649873173.521000
+Z19 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|O:/vhdl2/VHDL/peak_detector/dataGen.vhd|
+Z20 !s107 O:/vhdl2/VHDL/peak_detector/dataGen.vhd|
+R5
+R6
+!s100 lLE?nm`Ofa1FcE6ig29ES1
+!i10b 1
+Abehav
+R9
+R10
+R1
+DEx4 work 7 datagen 0 22 JVamX@:1GQ_IV9[`IJNJM0
+l19
+L15
+VTG_3k8NT<@]9ZMl8?DT2m3
+R4
+32
+R18
+R19
+R20
+R5
+R6
+!s100 N:o33JeO^j6G^QHV[=jWD2
+!i10b 1
+Etb_datagenconsume
+R2
+R9
+Z21 DPx4 ieee 15 std_logic_arith 0 22 4`Y?g_lkdn;7UL9IiJck01
+R10
+R1
+R3
+Z22 8O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+Z23 FO:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+l0
+L7
+VPXIIeTCnVWW][A;b6A@PA1
+R4
+32
+Z24 !s108 1649873173.818000
+Z25 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd|
+Z26 !s107 O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd|
+R5
+R6
+!s100 m`3fj9GA?jYFQzL=4]RAY0
+!i10b 1
+Atest
+R9
+R21
+R10
+R1
+DEx4 work 17 tb_datagenconsume 0 22 PXIIeTCnVWW][A;b6A@PA1
+l79
+L10
+VZ^HV?JYQaSGYKE3Zbo[Vz3
+R4
+32
+R24
+R25
+R26
+R5
+R6
+!s100 1<eP=lc4IC[:i9M:ZYHPH0
+!i10b 1

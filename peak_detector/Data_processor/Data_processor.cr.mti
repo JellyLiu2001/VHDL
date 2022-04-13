@@ -1,38 +1,25 @@
-C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/common_pack.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/common_pack.vhd
-Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Compiling package common_pack
+O:/vhdl2/VHDL/peak_detector/Data_processor/common_pack.vhd {0 {vcom -work work -2002 -explicit -vopt O:/vhdl2/VHDL/peak_detector/Data_processor/common_pack.vhd
+Model Technology ModelSim SE-64 vcom 10.1b Compiler 2012.04 Apr 26 2012
+** Error: (vcom-42) Unsupported ModelSim library format for "O:/vhdl2/VHDL/peak_detector/Data_processor/work". (Format: 4)
 
-} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\dataGen.vhd}
-Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package common_pack
--- Compiling entity dataGen
--- Compiling architecture behav of dataGen
+** Error: VHDL Compiler exiting
 
-} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/tb_CmdProcessor.vhd {1 {vcom -work work -2002 -explicit -stats=none {C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\tb_CmdProcessor.vhd}
-Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Loading package common_pack
--- Compiling entity tb_cmdProc_interim
--- Compiling architecture testbench of tb_cmdProc_interim
+} {3.0 4.0 5.0 6.0} {}} O:/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd {0 {vcom -work work -2002 -explicit -vopt O:/vhdl2/VHDL/peak_detector/Data_processor/dataGen.vhd
+Model Technology ModelSim SE-64 vcom 10.1b Compiler 2012.04 Apr 26 2012
+** Error: (vcom-42) Unsupported ModelSim library format for "O:/vhdl2/VHDL/peak_detector/Data_processor/work". (Format: 4)
 
-} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/Data_processor/Data_processor.vhd {2 {vcom -work work -2002 -explicit -stats=none {C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd}
-Model Technology ModelSim DE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package common_pack
--- Loading package NUMERIC_STD
--- Compiling entity dataConsume
--- Compiling architecture dataConsume_state of dataConsume
-** Warning: C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\Data_processor\Data_processor.vhd(167): (vcom-1152) Index value 3 is out of index range 0 to 2 of work.common_pack.CHAR_ARRAY_TYPE.
+** Error: VHDL Compiler exiting
 
-} {} {}}
+} {3.0 4.0 5.0 6.0} {}} O:/vhdl2/VHDL/peak_detector/Data_processor/Data_processor.vhd {0 {vcom -work work -2002 -explicit -vopt O:/vhdl2/VHDL/peak_detector/Data_processor/Data_processor.vhd
+Model Technology ModelSim SE-64 vcom 10.1b Compiler 2012.04 Apr 26 2012
+** Error: (vcom-42) Unsupported ModelSim library format for "O:/vhdl2/VHDL/peak_detector/Data_processor/work". (Format: 4)
+
+** Error: VHDL Compiler exiting
+
+} {3.0 4.0 5.0 6.0} {}} O:/vhdl2/VHDL/peak_detector/Data_processor/tb_dataConsume_signed.vhd {0 {vcom -work work -2002 -explicit -vopt O:/vhdl2/VHDL/peak_detector/Data_processor/tb_dataConsume_signed.vhd
+Model Technology ModelSim SE-64 vcom 10.1b Compiler 2012.04 Apr 26 2012
+** Error: (vcom-42) Unsupported ModelSim library format for "O:/vhdl2/VHDL/peak_detector/Data_processor/work". (Format: 4)
+
+** Error: VHDL Compiler exiting
+
+} {3.0 4.0 5.0 6.0} {}}

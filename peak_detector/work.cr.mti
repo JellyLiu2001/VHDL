@@ -1,0 +1,39 @@
+O:/vhdl2/VHDL/peak_detector/common_pack.vhd {1 {vcom -work work -2002 -explicit -vopt O:/vhdl2/VHDL/peak_detector/common_pack.vhd
+Model Technology ModelSim SE-64 vcom 10.1b Compiler 2012.04 Apr 26 2012
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling package common_pack
+
+} {} {}} O:/vhdl2/VHDL/peak_detector/dataConsume.vhd {2 {vcom -work work -2002 -explicit -vopt O:/vhdl2/VHDL/peak_detector/dataConsume.vhd
+Model Technology ModelSim SE-64 vcom 10.1b Compiler 2012.04 Apr 26 2012
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package common_pack
+-- Loading package NUMERIC_STD
+-- Compiling entity dataConsume
+-- Compiling architecture dataConsume_state of dataConsume
+** Warning: [14] O:/vhdl2/VHDL/peak_detector/dataConsume.vhd(167): (vcom-1152) Index value 3 is out of index range 0 to 2 of work.common_pack.CHAR_ARRAY_TYPE.
+
+
+} {} {}} O:/vhdl2/VHDL/peak_detector/dataGen.vhd {1 {vcom -work work -2002 -explicit -vopt O:/vhdl2/VHDL/peak_detector/dataGen.vhd
+Model Technology ModelSim SE-64 vcom 10.1b Compiler 2012.04 Apr 26 2012
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package common_pack
+-- Compiling entity dataGen
+-- Compiling architecture behav of dataGen
+
+} {} {}} O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd {1 {vcom -work work -2002 -explicit -vopt O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+Model Technology ModelSim SE-64 vcom 10.1b Compiler 2012.04 Apr 26 2012
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package common_pack
+-- Compiling entity tb_dataGenConsume
+-- Compiling architecture test of tb_dataGenConsume
+
+} {} {}}
