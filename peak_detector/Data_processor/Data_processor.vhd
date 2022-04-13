@@ -30,7 +30,7 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
   SIGNAL prefix:char_array_type(0 TO 2);--记peak前三位
   SIGNAL suffix:char_array_type(0 to 3);--记peak和三位
-  SIGNAL finnal_result:char_array_type(0 TO 7);--记全部
+  SIGNAL finnal_result:char_array_type(0 TO 6);--记全部
   SIGNAL index, index_peak:integer;--记位置
   SIGNAL DATAREADY : std_logic;
   SIGNAL Controlforindex, Controlforcomplete : std_logic;
@@ -39,7 +39,7 @@ BEGIN
 valueofnumwords = TO_INTEGER(unsigned(numWords_bcd(0))) + TO_INTEGER(unsigned(numWords_bcd(1))) *10 + TO_INTEGER(unsigned(numWords_bcd(2))) * 100--transfer BCD to integer
 ctrlOut <= ctrlOut_reg
 ctrlIn_detected = ctrl_In xor ctrlIn_delayed
-combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Controlforindex, Controlforcomplete)
+combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Comparator_done)
   BEGIN 
     CASE curState IS 
       WHEN init => -- Wait for start SIGNAL
@@ -65,13 +65,8 @@ combi_nextState:process(curState, start, reset, ctrlIn_detected,DATAREADY, Contr
         Else 
           nextState => first;--Not all bytes counted, go back to first stage and step to next byte
         END IF
-<<<<<<< HEAD
       WHEN fourth => --All bytes counter, transfer all SIGNAL to cmd, then step to seqdone.
-        IF Comparator_done ='1' and SHIFTER_prefix_done ='1' THEN --wait for shifter and comparator
-=======
-      WHEN fourth => --All bytes counter, transfer all signal to cmd, then step to seqdone.
-        IF Comparator_done ='1' and SHIFTER_prefix_done ='1' THEN --wait for shifter and comparator (???)
->>>>>>> 477fd5df9070582a57d831463dcad1f4c46c8692
+        IF Comparator_done ='1' THEN --wait for shifter and comparator
           nextState => fifth;
         Else
           nextState => fourth;
@@ -102,8 +97,7 @@ Control_SIGNAL :process (curstate)
     COUNTER_reset='0'
     compare_reset='0'
     COUNTER_done='0'
-    Controlforindex='0'
-    controlforcomplete ='0'
+    
 
     CASE curstate is
       WHEN init =>
@@ -121,8 +115,10 @@ Control_SIGNAL :process (curstate)
       When fifth =>
         Seqdone ='1'
         reset='1'
+        COUNTER_reset='1'
+        Compare_reset='1'
         dataResults <= finnal_result
-        
+        maxIndex <= MAXindex_BCD
     END CASE;
   END process;
 
