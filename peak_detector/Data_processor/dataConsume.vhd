@@ -27,7 +27,7 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic;
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
-  SIGNAL prefix:char_array_type(0 TO 2);--记peak前三位
+  SIGNAL prefix:char_array_type(0 TO 3);--记peak前三位
   SIGNAL suffix:char_array_type(0 to 3);--记peak和三位
   SIGNAL finnal_result:char_array_type(0 TO 6);--记全部
   SIGNAL index, index_peak:integer;--记位置
@@ -151,7 +151,7 @@ IF rising_edge(clk) and ctrlIn_detected='1' THEN
     for i in 0 TO 2 loop--3位循环
       prefix(i)<=prefix(i+1);
     END loop;
-      prefix(2)<=data;--peak
+      prefix(3)<=data;--peak
       SHIFTER_prefix_done<='1';--!
 END IF;
 END process;
