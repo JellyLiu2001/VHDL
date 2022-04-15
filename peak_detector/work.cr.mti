@@ -14,7 +14,7 @@ Model Technology ModelSim SE-64 vcom 10.1b Compiler 2012.04 Apr 26 2012
 -- Loading package NUMERIC_STD
 -- Compiling entity dataConsume
 -- Compiling architecture dataConsume_state of dataConsume
-** Warning: [14] O:/vhdl2/VHDL/peak_detector/dataConsume.vhd(167): (vcom-1152) Index value 3 is out of index range 0 to 2 of work.common_pack.CHAR_ARRAY_TYPE.
+** Warning: [14] O:/vhdl2/VHDL/peak_detector/dataConsume.vhd(198): (vcom-1272) Length of expected is 3; length of actual is 4.
 
 
 } {} {}} O:/vhdl2/VHDL/peak_detector/dataGen.vhd {1 {vcom -work work -2002 -explicit -vopt O:/vhdl2/VHDL/peak_detector/dataGen.vhd

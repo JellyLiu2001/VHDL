@@ -3,14 +3,11 @@
 # Compile of tb_dataConsume_unsigned.vhd was successful.
 # Compile of dataConsume.vhd was successful with warnings.
 # 4 compiles, 0 failed with no errors. 
-vsim -voptargs=+acc work.tb_datagenconsume
-# vsim -voptargs=+acc work.tb_datagenconsume 
-# ** Note: (vsim-3812) Design is being optimized...
-# 
-# ** Error: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd(163): (vopt-1133) Type mismatch for port "start" in component "dataConsume" when binding to entity "dataConsume".
-# 
-# ** Error: O:/vhdl2/VHDL/peak_detector/dataConsume.vhd(23): Vopt Compiler exiting
-# Error loading design
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd was successful with warnings.
+# 4 compiles, 0 failed with no errors. 
 # Compile of common_pack.vhd was successful.
 # Compile of dataGen.vhd was successful.
 # Compile of tb_dataConsume_unsigned.vhd was successful.
@@ -18,9 +15,7 @@ vsim -voptargs=+acc work.tb_datagenconsume
 # 4 compiles, 0 failed with no errors. 
 vsim -voptargs=+acc work.tb_datagenconsume
 # vsim -voptargs=+acc work.tb_datagenconsume 
-# ** Note: (vsim-3812) Design is being optimized...
-# 
-# ** Warning: [14] O:/vhdl2/VHDL/peak_detector/dataConsume.vhd(167): (vopt-1152) Index value 3 is out of index range 0 to 2 of work.common_pack.CHAR_ARRAY_TYPE.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
 # 
 # ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
 # 
@@ -33,17 +28,646 @@ vsim -voptargs=+acc work.tb_datagenconsume
 # Loading work.datagen(behav)#1
 # Loading ieee.numeric_std(body)
 # Loading work.dataconsume(dataconsume_state)#1
-add wave -position insertpoint  \
-sim:/tb_datagenconsume/curByte
-add wave -position insertpoint  \
-sim:/tb_datagenconsume/seqDone
-add wave sim:/tb_datagenconsume/dataConsume1/*
-run
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
-run
+add wave sim:/tb_datagenconsume/*
 # Causality operation skipped due to absense of debug database file
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+add wave -r /*
+run
+# ** Failure: Cycle count exceeded 4500; Cycle count:4501
+#    Time: 90050 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+restart
+add wave -r /*
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+run
+# ** Failure: Cycle count exceeded 4500; Cycle count:4501
+#    Time: 90050 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+run
+# ** Failure: Cycle count exceeded 4500; Cycle count:4502
+#    Time: 90070 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+restart
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+# msg=invalid command name ".main_pane.dataflow.interior.cs.body.pw.df.c.nlv" 
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd was successful with warnings.
+# 4 compiles, 0 failed with no errors. 
+vsim -voptargs=+acc work.tb_datagenconsume
+# vsim -voptargs=+acc work.tb_datagenconsume 
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+add wave -r /*
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd was successful with warnings.
+# 4 compiles, 0 failed with no errors. 
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+# Compile of dataConsume.vhd was successful with warnings.
+run
+# ** Failure: Cycle count exceeded 4500; Cycle count:4501
+#    Time: 90050 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+# Compile of dataConsume.vhd failed with 3 errors.
+restart
+# Compile of dataConsume.vhd failed with 2 errors.
+# Compile of dataConsume.vhd was successful with warnings.
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd was successful with warnings.
+# 4 compiles, 0 failed with no errors. 
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+add wave -r /*
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+restart
+# Compile of dataConsume.vhd failed with 2 errors.
+# Compile of dataConsume.vhd failed with 2 errors.
+# Compile of dataConsume.vhd was successful with warnings.
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+add wave -r /*
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+# Compile of dataConsume.vhd was successful with warnings.
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+# Compile of dataConsume.vhd was successful with warnings.
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+add wave -r /*
+# Compile of dataConsume.vhd failed with 2 errors.
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd failed with 2 errors.
+# 4 compiles, 1 failed with 2 errors. 
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd was successful with warnings.
+# 4 compiles, 0 failed with no errors. 
+add wave -r /*
+add wave -r /*
+run
+# ** Failure: Cycle count exceeded 4500; Cycle count:4501
+#    Time: 90050 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+run
+# ** Failure: Cycle count exceeded 4500; Cycle count:4502
+#    Time: 90070 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+vsim -voptargs=+acc work.tb_datagenconsume
+# vsim -voptargs=+acc work.tb_datagenconsume 
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+add wave -r /*
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+restart
+add wave -r /*
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+# Compile of dataConsume.vhd failed with 1 errors.
+# Compile of dataConsume.vhd was successful with warnings.
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+# Compile of dataConsume.vhd was successful with warnings.
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+# ** Warning: (vsim-8683) Uninitialized out port /tb_datagenconsume/dataConsume1/ctrlOut has no driver.
+# 
+# This port will contribute value (U) to the signal network.
+# 
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Failure: Cycle count exceeded 4500; Cycle count:4500
+#    Time: 90030 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+# Compile of dataConsume.vhd was successful with warnings.
+run
+# ** Failure: Cycle count exceeded 4500; Cycle count:4501
+#    Time: 90050 ns  Iteration: 0  Process: /tb_datagenconsume/tbCounter File: O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+# Break in Process tbCounter at O:/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd line 107
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Fatal: (vsim-3483) Delay in signal assignment is not ascending.
+#    Time: 70 ns  Iteration: 1  Process: /tb_datagenconsume/dataConsume1/Control_SIGNAL File: O:/vhdl2/VHDL/peak_detector/dataConsume.vhd
+# Fatal error in Process Control_SIGNAL at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd line 110
+# 
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+run
+# Cannot continue because of fatal error.
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+run
+# Cannot continue because of fatal error.
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+run
+# Cannot continue because of fatal error.
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+run
+# Cannot continue because of fatal error.
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+run
+# Cannot continue because of fatal error.
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+run
+# Cannot continue because of fatal error.
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+run
+# Cannot continue because of fatal error.
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+run 1000ns
+# Cannot continue because of fatal error.
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+# Compile of dataConsume.vhd was successful with warnings.
+run
+# Cannot continue because of fatal error.
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+restart
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Fatal: (vsim-3483) Delay in signal assignment is not ascending.
+#    Time: 70 ns  Iteration: 1  Process: /tb_datagenconsume/dataConsume1/Control_SIGNAL File: O:/vhdl2/VHDL/peak_detector/dataConsume.vhd
+# Fatal error in Process Control_SIGNAL at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd line 110
+# 
+# HDL call sequence:
+# Stopped at O:/vhdl2/VHDL/peak_detector/dataConsume.vhd 110 Process Control_SIGNAL
+# 
+# Compile of dataConsume.vhd was successful with warnings.
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# Compile of dataConsume.vhd was successful with warnings.
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# Compile of dataConsume.vhd was successful with warnings.
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+run
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd was successful with warnings.
+# 4 compiles, 0 failed with no errors. 
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+run
+run
+restart
+# Compile of dataConsume.vhd was successful with warnings.
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+run
+# Compile of dataConsume.vhd was successful with warnings.
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# Compile of dataConsume.vhd failed with 2 errors.
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd failed with 2 errors.
+# 4 compiles, 1 failed with 2 errors. 
+# Compile of common_pack.vhd was successful.
+# Compile of dataGen.vhd was successful.
+# Compile of tb_dataConsume_unsigned.vhd was successful.
+# Compile of dataConsume.vhd was successful with warnings.
+# 4 compiles, 0 failed with no errors. 
+restart
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "dataConsume(dataConsume_state)".
+# 
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.std_logic_arith(body)
+# Loading work.common_pack
+# Loading work.tb_datagenconsume(test)#1
+# Loading work.datagen(behav)#1
+# Loading ieee.numeric_std(body)
+# Loading work.dataconsume(dataconsume_state)#1
+run
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /tb_datagenconsume/dataConsume1

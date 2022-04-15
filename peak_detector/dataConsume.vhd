@@ -27,18 +27,19 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic;
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
-  SIGNAL prefix:char_array_type(0 TO 2);--记peak前三位
+  SIGNAL prefix:char_array_type(0 TO 3);--记peak前三位
   SIGNAL suffix:char_array_type(0 to 3);--记peak和三位
   SIGNAL finnal_result:char_array_type(0 TO 6);--记全部
   SIGNAL index, index_peak:integer;--记位置
   SIGNAL DATA_READY : std_logic;
   SIGNAL curstate, nextstate:state_type; 
+  Signal K,KK:std_logic;
 --  SIGNAL Controlforindex, Controlforcomplete : std_logic;
   SIGNAL valueofnumwords: integer range 0 to 999; --integer value of numWords_BCD
 BEGIN 
 valueofnumwords <= TO_INTEGER(unsigned(numWords_bcd(0))) + TO_INTEGER(unsigned(numWords_bcd(1))) *10 + TO_INTEGER(unsigned(numWords_bcd(2))) * 100;--transfer BCD to integer
-ctrlOut <= ctrlOut_reg;
 ctrlIn_detected <= ctrlIn xor ctrlIn_delayed;
+ctrlOut <= ctrlOut_reg;
 combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Comparator_done)
   BEGIN 
     CASE curState IS 
@@ -50,9 +51,9 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
           nextState <= init;
         END IF;
       WHEN first => --Send ctrl1 and wait for ctrl2
-        IF reset= '0' and ctrlIn_detected='1' THEN
+        IF ctrlIn_detected='1' THEN
           nextState <= second;
-        ElSIF reset = '0' and ctrlIn_detected='0' THEN
+        ElSIF ctrlIn_detected='0' THEN
           nextState <= first;
         ELSE
           nextState <= init;
@@ -82,14 +83,23 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
 Handshakeprotocol: process(clk)     
   begin
     IF rising_edge(clk) THEN
-      ctrlIn_delayed <= ctrlIn;
+      ctrlIn_delayed <= ctrlIn;      
       IF curState = first THEN
-        ctrlOut_reg <= NOT ctrlOut_reg;
+       ctrlOut_reg <= NOT ctrlOut_reg;
       ELSE
-        ctrlOut_reg <= ctrlOut_reg ;
-      END IF;
+       ctrlOut_reg <= ctrlOut_reg ;
+     END IF;
     END if;
   END process;
+
+Initializectrloutreg :process (clk)
+  begin
+    IF reset = '1' THEN
+      ctrlOut_reg<='0';
+    END IF;
+  END PROCESS;
+      
+
 
 
 Control_SIGNAL :process (curstate)
@@ -98,14 +108,14 @@ Control_SIGNAL :process (curstate)
     COUNTER_reset<='0';
     compare_reset<='0';
     COUNTER_done<='0';
+ --   ctrlOut_reg <='0';
     
 
     CASE curstate is
       WHEN init =>
         COUNTER_reset<='1';
         compare_reset<='1';
-      When first =>
-        ctrlOut <='1';
+        ctrlOut_reg <='0';
       when second =>
         DATA_READY<='1';
         dataready<=DATA_READY;
@@ -120,10 +130,12 @@ Control_SIGNAL :process (curstate)
         Compare_reset<='1';
         dataResults <= finnal_result;
         maxIndex <= MAXindex_BCD;
+      when others=>
+        seqDone<='0';
     END CASE;
   END process;
 
-STAGE_RESET:process (curState)
+STAGE_RESET:process (clk)
   begin
     IF reset ='1' THEN
       curState <= INIT;
@@ -151,7 +163,7 @@ IF rising_edge(clk) and ctrlIn_detected='1' THEN
     for i in 0 TO 2 loop--3位循环
       prefix(i)<=prefix(i+1);
     END loop;
-      prefix(2)<=data;--peak
+      prefix(3)<=data;--peak
       SHIFTER_prefix_done<='1';--!
 END IF;
 END process;
@@ -196,4 +208,5 @@ MAXindex_BCD(2)<=std_logic_vector(to_unsigned(index_peak/100 mod 10,numWords_bcd
 MAXindex_BCD(1)<=std_logic_vector(to_unsigned(index_peak/10 mod 10,numWords_bcd(0)'length));
 MAXindex_BCD(0)<=std_logic_vector(to_unsigned(index_peak/1 mod 10,numWords_bcd(0)'length));
 END process;
+
 END dataConsume_state;
