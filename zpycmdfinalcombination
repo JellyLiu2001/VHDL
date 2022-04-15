@@ -33,9 +33,10 @@ port (
 end ;
 
 architecture dataflow of cmdProc is
-    type state_type is (S0_INIT , S1_RXDATA ,L_HOLD,P_HOLD,Print_P,Print_L,count_N,counter_RESET,counter_receive,transmition,check,GIVE_Num,Give_data,recieve_byte,Print_byte_one,recieve_byte_2,
+    type state_type is (S0_INIT , S1_RXDATA ,L_HOLD,Print_P,Print_L,count_N,counter_RESET,counter_receive,transmition,check,GIVE_Num,Give_data,recieve_byte,Print_byte_one,recieve_byte_2,
   Print_byte_two,recieve_space,print_space,undefined,stop_print,n_print,r_print,transmition_fail,waiting_tx,wait_txnow,print_lastbyte,receive_lastbyte,
-  S2_PEAK,S2_HOLD,PEAK1,PEAK1_HOLD,PEAK2,PEAK2_HOLD,SPACE,SPACE_HOLD,INDEX1,INDEX1_HOLD,INDEX2,INDEX2_HOLD,INDEX3, S3_LIST,S3_HOLD,List1,List1_HOLD,List2,List2_HOLD,SPACEL,SPACEL_HOLD);
+  S2_PEAK,S2_HOLD,PEAK1,PEAK1_HOLD,PEAK2,PEAK2_HOLD,SPACE,SPACE_HOLD,INDEX1,INDEX1_HOLD,INDEX2,INDEX2_HOLD,INDEX3,SPACEL_wait, List1_wait,List2_wait,S3_LIST,S3_HOLD,L_wait,List1,List1_HOLD,
+  SPACE_wait,PEAK1_wait,PEAK2_wait,P_wait,INDEX1_wait,INDEX2_wait,INDEX3_wait,List2,List2_HOLD,SPACEL,SPACEL_HOLD);
     signal currentState, nextState: state_type;
     SIGNAL COUNT_NUM: integer:=0;
     SIGNAL COUNT_LIST: integer:=0;
@@ -406,104 +407,138 @@ begin
        end if;
 ------------------------------------------------------------------------------------------------------------      
       WHEN  S2_PEAK => 
-          nextState <= P_HOLD;
+          nextState <= Print_P;
           
-      when P_HOLD=>
-         nextState <= Print_P;
+      
           
       when Print_P =>
-        if txdone='1' then
-          nextState <= S2_HOLD;
-        end if; 
-        
-      when S2_HOLD =>      --all the hold states are set to avoid the effect of delay of txDone response to the change in txNow which is 
-        nextState <= PEAK1;--one clk cycle.
+       
+          nextState <= P_wait;
           
+      when P_wait =>
+          nextState <=S2_HOLD;
+        
+      when S2_HOLD =>  
+      
+        if txdone='1' then 
+           nextState <= PEAK1;
+        end if;   
       WHEN PEAK1=>
-          if txdone='1' then
-            nextState <= PEAK1_HOLD;
-          end if;
+          
+            nextState <= PEAK1_wait;
+          
+      when PEAK1_wait=>
+         nextState <= PEAK1_HOLD;
       
       when PEAK1_HOLD=>
+        if txdone='1' then
           nextState<= PEAK2;
-          
+        end if;  
       when PEAK2=>
-          if txdone='1' then
-            nextState <=PEAK2_HOLD;
-          end if;
+          
+            nextState <=PEAK2_wait;
+      when PEAK2_wait=>
+         nextState <= PEAK2_HOLD;    
       
       when PEAK2_HOLD=>
+        if txdone='1' then
           nextState<= SPACE;
-      
+        end if;
       when SPACE=>
-          if txdone='1' then
-            nextState <= SPACE_HOLD;
-          end if;  
+          
+            nextState <= SPACE_wait;
+      when SPACE_wait=>
+         nextState <= SPACE_HOLD;      
           
       when SPACE_HOLD=>
+        if txdone='1' then
           nextState<= INDEX1;   
-          
+        end if;   
       when INDEX1=>
-          if txdone='1' then
-            nextState <= INDEX1_HOLD;
-          end if;  
+          
+            nextState <= INDEX1_wait;
+      when INDEX1_wait=>
+      
+            nextState <=   INDEX1_HOLD; 
           
       when INDEX1_HOLD=>
+        if txdone='1' then
           nextState<= INDEX2;
-          
+        end if;  
       when INDEX2=>
-          if txdone='1' then
-            nextState <= INDEX2_HOLD;
-          end if;  
+          
+            nextState <= INDEX2_wait;
+      when INDEX2_wait=>
+      
+            nextState <=   INDEX2_HOLD; 
           
       when INDEX2_HOLD=>
+        if txdone='1' then
           nextState<= INDEX3;
+        end if; 
           
       when INDEX3=>
+          
+            nextState <=INDEX3_wait ;
+          
+          
+       when INDEX3_wait=>
           if txdone='1' then
-            nextState <= S0_INIT;
-          end if;  
+            nextState <=S0_INIT ;
+        end if;
 ---------------------------------------------------------------------------------------         
       WHEN  S3_LIST =>
-         nextState <= L_HOLD;
-         
-      when L_HOLD=>
          nextState <= Print_L;
          
+      
+         
       when Print_L =>
-          if txdone='1' then
           
-             nextState <=S3_HOLD;
-          end if;
-      when S3_HOLD =>      --all the hold states are set to avoid the effect of delay of txDone response to the change in txNow which is 
-        nextState <= List1;--one clk cycle.
-        encounterList<='0'; --the hold state there can make sure that the encounterList will only remain '1' for one clk cycle
+             nextState <=L_wait;
+                      
+      when  L_wait =>
+             nextState <=L_HOLD;
+          
+      when L_HOLD=>
+        if txdone='1' then
+         nextState <= S3_HOLD;
+        end if;
+      when S3_HOLD =>      
+        nextState <= List1;
+        encounterList<='0';
         
       
       when List1=>  
-         if txdone='1' then
-            nextState <= List1_HOLD;
-          end if;
+         
+            nextState <= List1_wait;
+      when List1_wait=>
+           nextState <= List1_HOLD;
        
       when List1_HOLD=>
-        
-         nextState <= List2;  
-         
+        if txdone='1' then
+          nextState <= List2;  
+        end if; 
       when List2=>  
-         if txdone='1' then
-            nextState <= List2_HOLD;
-          end if;
+         
+            nextState <= List2_wait;
+      when List2_wait=>
+         nextState <=List2_HOLD;
           
       when List2_HOLD=>
+        if txdone='1' then
           nextState <= SPACEL;
-          
+        end if;  
       when SPACEL=>
 
           
-          if txdone='1' then
+          
+           nextState <=SPACEL_wait;
+           
+      when SPACEL_wait=>   
            nextState <= SPACEL_HOLD;
-          end if;
+          
       when SPACEL_HOLD=>
+        if txdone='1' then
             encounterList<='1';
            if COUNT_LIST < 6 then
             nextState <=S3_HOLD;
@@ -513,7 +548,7 @@ begin
             resetList<='1';
             encounterList<='0';
           end if;     
-    
+        end if;
           
      
 ---------------------------------------------------------------------------------------------- 
@@ -656,14 +691,16 @@ begin
         
       -------------------------------------------------------------------------------------------         
       when S2_PEAK=>
-          txnow<='1';
+          null;
           
-      when P_HOLD=> 
-         NULL;
+     
           
       when Print_P=>
           txData <= rxData;
-          txnow <='1';   
+          txnow <='1'; 
+          
+      when P_wait=>
+          txnow<='0';  
       
       
       when S2_HOLD=>
@@ -672,6 +709,9 @@ begin
       when PEAK1=>
           txData <= BtoH1(dataResultsR(3));
           txnow <='1';
+      
+      when PEAK1_wait=>
+          txnow<='0'; 
           
       when PEAK1_HOLD=>
           null;
@@ -680,7 +720,8 @@ begin
       when PEAK2=>  
           txData <= BtoH2(dataResultsR(3));
           txnow <='1';
-          
+      when PEAK2_wait=>
+          txnow<='0';     
       
       when PEAK2_HOLD=>
           null;
@@ -689,7 +730,8 @@ begin
 
           txData <= "00100000";
           txnow <='1';
-          
+      when SPACE_wait=>
+          txnow<='0';     
       
       when SPACE_HOLD=>
           null;
@@ -698,7 +740,8 @@ begin
           txData(7 downto 4) <= "0011";
           txData(3 downto 0) <= maxIndexR(2);
           txnow <='1';
-          
+      when INDEX1_wait=>
+          txnow<='0';     
       
       WHEN INDEX1_HOLD=>
           null;
@@ -707,7 +750,8 @@ begin
           txData(7 downto 4) <= "0011";
           txData(3 downto 0) <= maxIndexR(1);
           txnow <='1';
-          
+      when INDEX2_wait=>
+          txnow<='0';     
           
       WHEN INDEX2_HOLD=>
           null;
@@ -716,18 +760,22 @@ begin
           txData(7 downto 4) <= "0011";
           txData(3 downto 0) <= maxIndexR(0);
           txnow <='1';
-          
+      when INDEX3_wait=>
+          txnow<='0';     
  ----------------------------------------------------------------------------------------         
           
       when S3_LIST=>
-          txnow<='1';
+          null;
           
       when L_HOLD=> 
-         NULL;
+         null;
           
       when Print_L=>
           txData <= rxData;
           txnow <='1'; 
+      
+      when L_wait=>
+          txnow<='0';
           
       when S3_HOLD=>
           null;
@@ -735,15 +783,16 @@ begin
       when List1=>
           txData <= BtoH1(dataResultsR(COUNT_LIST));
           txnow <='1';
-          
-          
+      when List1_wait=>    
+          txnow<='0';
       when List1_HOLD=>
           null;
           
       when List2=>
           txData <= BtoH2(dataResultsR(COUNT_LIST));
           txnow <='1';
-          
+       when List2_wait=>    
+          txnow<='0';    
           
       when List2_HOLD=>
           null;
@@ -751,9 +800,10 @@ begin
       when SPACEL=>
           txData <= "00100000";
           txnow <='1';
-          
+      when SPACEL_wait=>   
+          txnow<='0';
       when SPACEL_HOLD=>
-          null;  
+            null;
       
      end case;
   end process;    
@@ -880,5 +930,7 @@ begin
   END PROCESS; -- seq  
   
 END dataflow;
+
+
 
 
