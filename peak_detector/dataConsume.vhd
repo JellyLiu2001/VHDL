@@ -77,30 +77,22 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
           
   END process;
 
-CtrlIndelay: process(clk)     
+Seq_Logic_Handshakeprotocol: process(clk)     
   begin
     IF rising_edge(clk) THEN
-      ctrlIn_delayed <= ctrlIn;            --ctrlOut <= ctrlOut_reg;
-      --IF curState = first THEN
-        --ctrlOut_reg <= NOT ctrlOut_reg;
-     -- ELSE
-       --ctrlOut_reg <= ctrlOut_reg ;
-     --END IF;
+      ctrlIn_delayed <= ctrlIn;  
+      IF reset = '1' THEN
+        ctrlOut_reg <='0';
+      END IF;
     END if;
   END process;
 
-Handshakeprotocol :process (clk) --initialize
+Comb_logic_Handshakeprotocol :process (clk) --initialize
   begin
-    IF rising_edge(clk) THEN
-      IF reset = '1' THEN
-        ctrlOut_reg<='0';
-      ELSE
-        IF curState = first THEN
-          ctrlOut_reg <= not ctrlOut_reg;
-        else
-          ctrlOut_reg <= ctrlOut_reg;
-        END IF;
-      END IF;
+    IF rising_edge(clk) and curState = first THEN
+      ctrlOut_reg <= not ctrlOut_reg;
+    else
+      ctrlOut_reg <= ctrlOut_reg;
     END IF;
   END PROCESS;
       
