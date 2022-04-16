@@ -141,7 +141,7 @@ begin
     
     case currentState is
       when S0_INIT =>--------signal all back to the inital 
-        
+        resetList<='0';
       
         if rxnow='1' THEN -------waiting rxnow go high to receive data 
           nextState <= S1_RXDATA;
