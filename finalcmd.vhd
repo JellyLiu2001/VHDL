@@ -859,7 +859,7 @@ begin
   -------------------------------------------------------------
   -----------------------------------------------
   -------------------
-  COUNTER_NUM: PROCESS(reset, clk)  ---------------------------this counter one of the function is to keep track of the number of the (0-9) inputs
+  COUNTER_NUM: PROCESS( clk)  ---------------------------this counter one of the function is to keep track of the number of the (0-9) inputs
 
   BEGIN 
 
@@ -881,7 +881,7 @@ begin
   
      
  
-   COUNTER_LIST: PROCESS(reset, clk)
+   COUNTER_LIST: PROCESS( clk)
 
   BEGIN
 
