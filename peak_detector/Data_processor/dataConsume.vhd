@@ -7,7 +7,7 @@ use ieee.numeric_std.all;
     port (
       clk: in std_logic;
       reset: in std_logic; -- synchronous reset
-      start: in bit; --check rising edge, when 1, start--下面的state重名了
+      start: in std_logic; --check rising edge, when 1, start--下面的state重名了
       numWords_bcd: in BCD_ARRAY_TYPE(2 downto 0);--3*4 BCD ANNN--下面重名了
       ctrlIn: in std_logic;--握手
       ctrlOut: out std_logic;--握手

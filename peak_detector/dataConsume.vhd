@@ -24,7 +24,7 @@ architecture dataConsume_state OF dataConsume IS
   TYPE state_type IS(init, first, second, third, fourth, fifth);--define state 
  --SIGNAL init,first,second,third,fourth,fifth:state_type;--SIGNAL of the state
   SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done:std_logic;  --erase the COUNTER and comparetor during each cycle.
-  SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic;
+  SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic :='0';
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
   SIGNAL prefix:char_array_type(0 TO 3);--记peak前三位
@@ -34,17 +34,14 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL DATA_READY : std_logic;
   SIGNAL curstate, nextstate:state_type; 
   Signal K,KK:std_logic;
---  SIGNAL Controlforindex, Controlforcomplete : std_logic;
   SIGNAL valueofnumwords: integer range 0 to 999; --integer value of numWords_BCD
 BEGIN 
 valueofnumwords <= TO_INTEGER(unsigned(numWords_bcd(0))) + TO_INTEGER(unsigned(numWords_bcd(1))) *10 + TO_INTEGER(unsigned(numWords_bcd(2))) * 100;--transfer BCD to integer
 ctrlIn_detected <= ctrlIn xor ctrlIn_delayed;
-ctrlOut <= ctrlOut_reg;
 combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Comparator_done)
-  BEGIN 
+  BEGIN           
     CASE curState IS 
       WHEN init => -- Wait for start SIGNAL
-        ctrlOut_reg <='0';
         IF start = '1' THEN
           nextState <= first;
         ELSE
@@ -80,28 +77,33 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
           
   END process;
 
-Handshakeprotocol: process(clk)     
+CtrlIndelay: process(clk)     
   begin
     IF rising_edge(clk) THEN
-      ctrlIn_delayed <= ctrlIn;      
-      IF curState = first THEN
-       ctrlOut_reg <= NOT ctrlOut_reg;
-      ELSE
-       ctrlOut_reg <= ctrlOut_reg ;
-     END IF;
+      ctrlIn_delayed <= ctrlIn;            --ctrlOut <= ctrlOut_reg;
+      --IF curState = first THEN
+        --ctrlOut_reg <= NOT ctrlOut_reg;
+     -- ELSE
+       --ctrlOut_reg <= ctrlOut_reg ;
+     --END IF;
     END if;
   END process;
 
-Initializectrloutreg :process (clk)
+Handshakeprotocol :process (clk) --initialize
   begin
-    IF reset = '1' THEN
-      ctrlOut_reg<='0';
+    IF rising_edge(clk) THEN
+      IF reset = '1' THEN
+        ctrlOut_reg<='0';
+      ELSE
+        IF curState = first THEN
+          ctrlOut_reg <= not ctrlOut_reg;
+        else
+          ctrlOut_reg <= ctrlOut_reg;
+        END IF;
+      END IF;
     END IF;
   END PROCESS;
       
-
-
-
 Control_SIGNAL :process (curstate)
   begin
     DATA_READY <='0';
@@ -115,7 +117,6 @@ Control_SIGNAL :process (curstate)
       WHEN init =>
         COUNTER_reset<='1';
         compare_reset<='1';
-        ctrlOut_reg <='0';
       when second =>
         DATA_READY<='1';
         dataready<=DATA_READY;
@@ -209,4 +210,5 @@ MAXindex_BCD(1)<=std_logic_vector(to_unsigned(index_peak/10 mod 10,numWords_bcd(
 MAXindex_BCD(0)<=std_logic_vector(to_unsigned(index_peak/1 mod 10,numWords_bcd(0)'length));
 END process;
 
+ctrlOut <= CtrlOut_reg;
 END dataConsume_state;
