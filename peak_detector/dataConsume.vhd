@@ -23,7 +23,7 @@ use ieee.numeric_std.all;
 architecture dataConsume_state OF dataConsume IS 
   TYPE state_type IS(init, first,haha, second, third, fourth, fifth);--define state 
  --SIGNAL init,first,second,third,fourth,fifth:state_type;--SIGNAL of the state
-  SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done:std_logic;  --erase the COUNTER and comparetor during each cycle.
+  SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done,k:std_logic;  --erase the COUNTER and comparetor during each cycle.
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic :='0';
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
@@ -33,7 +33,6 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL index, index_peak:integer;--记位置
   SIGNAL DATA_READY : std_logic;
   SIGNAL curstate, nextstate:state_type; 
-  Signal K,KK:std_logic;
   SIGNAL valueofnumwords: integer range 0 to 999; --integer value of numWords_BCD
 BEGIN 
 valueofnumwords <= TO_INTEGER(unsigned(numWords_bcd(0))) + TO_INTEGER(unsigned(numWords_bcd(1))) *10 + TO_INTEGER(unsigned(numWords_bcd(2))) * 100;--transfer BCD to integer
@@ -146,64 +145,75 @@ STAGE_RESET:process (clk)
   END process;
 ----------------------------------------------------
 
-COUNTER_process:process(data,reset)--TO calculate the index and compare the peak value. 
+COUNTER_process:process(DATA_READY)--TO calculate the index and compare the peak value. 
 BEGIN
   IF COUNTER_reset='1' THEN
       COUNTER<=0;
-  ELSIF rising_edge(clk) THEN
+  ELSIF data_ready='1'THEN
       COUNTER <= COUNTER + 1;
-      COUNTER_done<='1';--!总结写
+      COUNTER_done<='1';
   END IF;
 END process;  
 
 ----------------------------------------------------
 
-SHIFTER_prefix:process(data) --存三位
+SHIFTER_prefix:process(data,clk) 
 BEGIN
-IF rising_edge(clk) and ctrlIn_detected='1' THEN
-    for i in 0 TO 2 loop--3位循环
-      prefix(i)<=prefix(i+1);
-    END loop;
-      prefix(3)<=data;--peak
-      SHIFTER_prefix_done<='1';--!
+IF reset='1' THEN
+prefix<=("00000000","00000000","00000000","00000000");
+elsIF rising_edge(clk) and ctrlIn_detected='1' THEN
+	k<='0';
+	if k='0' then
+   	 	for i in 0 TO 2 loop
+      			prefix(i)<=prefix(i+1);
+    		END loop;
+      		prefix(2)<=data;--peak
+	elsif k='1' then
+		prefix(3)<=data;
+	End if;
+SHIFTER_prefix_done<='1';
 END IF;
 END process;
 
-----------------------------------------------------
-
-COMPARATOR_process:process(data_ready,COUNTER)--比较
+--------------------------------------------------
+COMPARATOR_process:process(clk,data)
 BEGIN
-IF compare_reset='1' or curstate= init THEN--清零(curstate 应该是init)
+
+IF compare_reset='1' or curstate= init THEN
   index_peak<=0;
 
 ELSIF rising_edge(clk) THEN
-    IF data > prefix(3) THEN--选择最大的值
+    IF data > prefix(3) THEN
+	k<='1';
       index_peak<=COUNTER;
-      COMPARATOR_done<='1';--!
+      COMPARATOR_done<='1';
+     	ELSE
+	k<='0';
+      COMPARATOR_done<='0';
     END IF;
 END IF;
 END process;
 
+--------------------------------------------------
+
+--SHIFTER_suffix:process(COUNTER,index_peak) 
+--BEGIN
+--if COUNTER-index_peak=0 then
+--  suffix(0)<=data;
+--elsif COUNTER-index_peak=1 then
+--  suffix(1)<=data;
+--elsif COUNTER-index_peak=2 then
+--  suffix(2)<=data;
+--elsif COUNTER-index_peak=3 then
+--  suffix(3)<=data;
+--  finnal_result(0 to 2)<=prefix;
+--  finnal_result(3 to 6)<=suffix;
+--END if;
+--END process;
+
 ----------------------------------------------------
 
-SHIFTER_suffix:process(COUNTER,index_peak) --存后四位
-BEGIN
-if COUNTER-index_peak=0 then
-  suffix(0)<=data;
-elsif COUNTER-index_peak=1 then
-  suffix(1)<=data;
-elsif COUNTER-index_peak=2 then
-  suffix(2)<=data;
-elsif COUNTER-index_peak=3 then
-  suffix(3)<=data;
-  finnal_result(0 to 2)<=prefix;--全部的7位
-  finnal_result(3 to 6)<=suffix;
-END if;
-END process;
-
-----------------------------------------------------
-
-maxindex_conversion:process(index_peak) --integer输出bcd
+maxindex_conversion:process(index_peak) 
 BEGIN
 MAXindex_BCD(2)<=std_logic_vector(to_unsigned(index_peak/100 mod 10,numWords_bcd(0)'length));
 MAXindex_BCD(1)<=std_logic_vector(to_unsigned(index_peak/10 mod 10,numWords_bcd(0)'length));
