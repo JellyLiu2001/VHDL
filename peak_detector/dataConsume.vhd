@@ -21,7 +21,7 @@ use ieee.numeric_std.all;
   END dataConsume;
 
 architecture dataConsume_state OF dataConsume IS 
-  TYPE state_type IS(init, first, second, third, fourth, fifth);--define state 
+  TYPE state_type IS(init, first,haha, second, third, fourth, fifth);--define state 
  --SIGNAL init,first,second,third,fourth,fifth:state_type;--SIGNAL of the state
   SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done:std_logic;  --erase the COUNTER and comparetor during each cycle.
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic :='0';
@@ -48,15 +48,20 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
           nextState <= init;
         END IF;
       WHEN first => --Send ctrl1 and wait for ctrl2
-        IF ctrlIn_detected='1' THEN
-          nextState <= second;
-        ElSIF ctrlIn_detected='0' THEN
-          nextState <= first;
+      nextState<=second;
+
+      When haha=>
+    IF ctrlIn_detected='1' THEN
+      nextState <= first;
+    ElSIF ctrlIn_detected='0' THEN
+      nextState <= haha;
         ELSE
           nextState <= init;
         END IF;
+
       WHEN second => --Set dataready SIGNAL high and give byte
         nextState <= third;
+
       WHEN third =>  --stage to see if counter 
         IF COUNTER = valueofnumwords THEN --All bytes has been counted.
           nextState <= fourth;
@@ -77,22 +82,20 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
           
   END process;
 
-Seq_Logic_Handshakeprotocol: process(clk)     
+
+Handshakeprotocol :process (clk) --initialize
   begin
     IF rising_edge(clk) THEN
-      ctrlIn_delayed <= ctrlIn;  
+      ctrlIn_delayed <= ctrlIn;
       IF reset = '1' THEN
-        ctrlOut_reg <='0';
+        ctrlOut_reg<='0';
+      ELSE
+        IF curState = first THEN
+          ctrlOut_reg <= not ctrlOut_reg;
+        else
+          ctrlOut_reg <= ctrlOut_reg;
+        END IF;
       END IF;
-    END if;
-  END process;
-
-Comb_logic_Handshakeprotocol :process (clk) --initialize
-  begin
-    IF rising_edge(clk) and curState = first THEN
-      ctrlOut_reg <= not ctrlOut_reg;
-    else
-      ctrlOut_reg <= ctrlOut_reg;
     END IF;
   END PROCESS;
       
@@ -109,22 +112,27 @@ Control_SIGNAL :process (curstate)
       WHEN init =>
         COUNTER_reset<='1';
         compare_reset<='1';
+
       when second =>
+        byte <= data;
+
+      when third =>
         DATA_READY<='1';
         dataready<=DATA_READY;
-        byte <= data;
-      when third =>
-        DATA_READY <='0';
+
       when fourth =>
         COUNTER_done <='1';
+
       When fifth =>
         Seqdone <='1';
         COUNTER_reset<='1';
         Compare_reset<='1';
         dataResults <= finnal_result;
         maxIndex <= MAXindex_BCD;
+        
       when others=>
         seqDone<='0';
+        data_ready<='0';
     END CASE;
   END process;
 
