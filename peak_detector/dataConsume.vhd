@@ -21,7 +21,7 @@ use ieee.numeric_std.all;
   END dataConsume;
 
 architecture dataConsume_state OF dataConsume IS 
-  TYPE state_type IS(init, first,haha, second, third, fourth, fifth);--define state 
+  TYPE state_type IS(reset_stage, init, first,haha, second, third, fourth, fifth);--define state 
  --SIGNAL init,first,second,third,fourth,fifth:state_type;--SIGNAL of the state
   SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done,k:std_logic;  --erase the COUNTER and comparetor during each cycle.
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic :='0';
@@ -40,9 +40,13 @@ ctrlIn_detected <= ctrlIn xor ctrlIn_delayed;
 combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Comparator_done)
   BEGIN           
     CASE curState IS 
+      when reset_stage =>
+        COUNTER_reset <='1';
+        compare_reset <='1';
+        nextState <= init;
+        
       WHEN init => -- Wait for start SIGNAL
-        COUNTER_reset<='1';
-        compare_reset<='1';
+
         COUNTER_done <='0';
         CtrlOut_reg <='0';
         IF start = '1' THEN
@@ -180,7 +184,7 @@ COUNTER_process:process(DATA_READY)--TO calculate the index and compare the peak
 BEGIN
   IF COUNTER_reset='1' THEN
       COUNTER<=0;
-  ELSIF data_ready='1'THEN
+  ELSIF data_ready='1' THEN
       COUNTER <= COUNTER + 1;
       COUNTER_done<='1';
   END IF;
@@ -210,7 +214,7 @@ END process;
 COMPARATOR_process:process(clk,data)
 BEGIN
 
-IF compare_reset='1' or curstate= init THEN
+IF compare_reset='1' THEN
   index_peak<=0;
 
 ELSIF rising_edge(clk) THEN
