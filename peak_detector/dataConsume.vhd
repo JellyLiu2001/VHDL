@@ -7,14 +7,14 @@ use ieee.numeric_std.all;
     port (
       clk: in std_logic;
       reset: in std_logic; -- synchronous reset
-      start: in std_logic; --check rising edge, when 1, start--下面的state重名了
-      numWords_bcd: in BCD_ARRAY_TYPE(2 downto 0);--3*4 BCD ANNN--下面重名了
-      ctrlIn: in std_logic;--握手
-      ctrlOut: out std_logic;--握手
-      data: in std_logic_vector(7 downto 0); --从data gen的数据
-      dataReady: out std_logic; --data可用传输
-      byte: out std_logic_vector(7 downto 0); --给到cmd的数据
-      seqDone: out std_logic; --完成状态
+      start: in std_logic; --check rising edge, when 1, start--ä¸é¢çstateéåäº
+      numWords_bcd: in BCD_ARRAY_TYPE(2 downto 0);--3*4 BCD ANNN--ä¸é¢éåäº
+      ctrlIn: in std_logic;--æ¡æ
+      ctrlOut: out std_logic;--æ¡æ
+      data: in std_logic_vector(7 downto 0); --ä»data gençæ°æ®á
+      dataReady: out std_logic; --dataå¯ç¨ä¼ è¾
+      byte: out std_logic_vector(7 downto 0); --ç»å°cmdçæ°æ®
+      seqDone: out std_logic; --å®æç¶æ
       maxIndex: out BCD_ARRAY_TYPE(2 downto 0); --3*4 BCD
       dataResults: out CHAR_ARRAY_TYPE(0 TO 6)  -- 7*8 (-3:peak:3)
     ); 
@@ -27,10 +27,10 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic :='0';
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
-  SIGNAL prefix:char_array_type(0 TO 3);--记peak前三位
-  SIGNAL suffix:char_array_type(0 to 3);--记peak和三位
-  SIGNAL finnal_result:char_array_type(0 TO 6);--记全部
-  SIGNAL index, index_peak:integer;--记位置
+  SIGNAL prefix:char_array_type(0 TO 3);--è®°peakåä¸ä½
+  SIGNAL suffix:char_array_type(0 to 3);--è®°peakåä¸ä½
+  SIGNAL finnal_result:char_array_type(0 TO 6);--è®°å¨é¨
+  SIGNAL index, index_peak:integer;--è®°ä½ç½®
   SIGNAL DATA_READY : std_logic;
   SIGNAL curstate, nextstate:state_type; 
   SIGNAL valueofnumwords: integer range 0 to 999; --integer value of numWords_BCD
@@ -41,99 +41,130 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
   BEGIN           
     CASE curState IS 
       WHEN init => -- Wait for start SIGNAL
+        COUNTER_reset<='1';
+        compare_reset<='1';
+        COUNTER_done <='0';
+        CtrlOut_reg <='0';
         IF start = '1' THEN
           nextState <= first;
         ELSE
           nextState <= init;
         END IF;
-      WHEN first => --Send ctrl1 and wait for ctrl2
-      nextState<=second;
+        
+      WHEN first => 
+      COUNTER_reset<='0';
+      compare_reset<='0';
+      
+      IF ctrlIn_detected ='1' THEN
+        CtrlOut_reg <='0';
 
-      When haha=>
-    IF ctrlIn_detected='1' THEN
-      nextState <= first;
-    ElSIF ctrlIn_detected='0' THEN
-      nextState <= haha;
-        ELSE
-          nextState <= init;
-        END IF;
+        nextState <= second;
+      Else
+
+        CtrlOut_reg <='1';
+      END IF;
+
+     -- When haha=>
+   -- IF ctrlIn_detected='1' THEN
+     -- nextState <= first;
+--    ElSIF ctrlIn_detected='0' THEN
+     -- nextState <= haha;
+       -- ELSE
+        --  nextState <= init;
+      --  END IF;
 
       WHEN second => --Set dataready SIGNAL high and give byte
+        CtrlOut_reg <='0';
+ 
         nextState <= third;
 
       WHEN third =>  --stage to see if counter 
+        CtrlOut_reg <='0';
         IF COUNTER = valueofnumwords THEN --All bytes has been counted.
           nextState <= fourth;
         Else 
-          nextState <= first;--Not all bytes counted, go back to first stage and step to next byte
+          nextState <= init;--Not all bytes counted, go back to first stage and step to next byte
         END IF;
-      WHEN fourth => --All bytes counter, transfer all SIGNAL to cmd, then step to seqdone.
+      WHEN fourth => --All bytes counter, transfer all SIGNAL to cmd, then step to seqdone
+ 
+        COUNTER_done <='1';
         IF Comparator_done ='1' THEN --wait for shifter and comparator
           nextState <= fifth;
         Else
           nextState <= fourth;
         END IF;
       When fifth => --complete, give seqDone high SIGNAL
-        nextState <= init; 
-      When others =>
-        nextState <= init;   
-    END CASE;
-          
-  END process;
-
-
-Handshakeprotocol :process (clk) --initialize
-  begin
-    IF rising_edge(clk) THEN
-      ctrlIn_delayed <= ctrlIn;
-      IF reset = '1' THEN
-        ctrlOut_reg<='0';
-      ELSE
-        IF curState = first THEN
-          ctrlOut_reg <= not ctrlOut_reg;
-        else
-          ctrlOut_reg <= ctrlOut_reg;
-        END IF;
-      END IF;
-    END IF;
-  END PROCESS;
-      
-Control_SIGNAL :process (curstate)
-  begin
-    DATA_READY <='0';
-    COUNTER_reset<='0';
-    compare_reset<='0';
-    COUNTER_done<='0';
- --   ctrlOut_reg <='0';
-    
-
-    CASE curstate is
-      WHEN init =>
-        COUNTER_reset<='1';
-        compare_reset<='1';
-
-      when second =>
-        byte <= data;
-
-      when third =>
-        DATA_READY<='1';
-        dataready<=DATA_READY;
-
-      when fourth =>
-        COUNTER_done <='1';
-
-      When fifth =>
         Seqdone <='1';
         COUNTER_reset<='1';
         Compare_reset<='1';
         dataResults <= finnal_result;
         maxIndex <= MAXindex_BCD;
-        
-      when others=>
+        nextState <= init; 
+      When others =>
         seqDone<='0';
-        data_ready<='0';
     END CASE;
+          
   END process;
+
+Handshakeprotocol :process (clk) --initialize
+  begin
+    IF rising_edge(clk) THEN
+      ctrlIn_delayed <= ctrlIn;
+      ctrlOut <= CtrlOut_reg;
+      byte <= data;
+      DATA_ready <= CtrlIn_detected;
+      dataready<=DATA_READY;
+--      IF reset = '1' THEN
+--        ctrlOut_reg<='0';
+--      ELSE
+--        IF curState = first THEN
+--          ctrlOut_reg <= not ctrlOut_reg;
+--        else
+--          ctrlOut_reg <= ctrlOut_reg;
+--        END IF;
+--      END IF;
+    END IF;
+  END PROCESS;
+      
+--Control_SIGNAL :process (curstate)
+--  begin
+--    DATA_READY <='0';
+--    COUNTER_reset<='0';
+--    compare_reset<='0';
+--    COUNTER_done<='0';
+-- --   ctrlOut_reg <='0';
+--    
+--
+--    CASE curstate is
+--      WHEN init =>
+--        COUNTER_reset<='1';
+--        compare_reset<='1';
+--
+--      when second =>
+--        byte <= data;
+--
+--      when third =>
+--        DATA_READY<='1';
+--        dataready<=DATA_READY;
+--
+--      when fourth =>
+--        COUNTER_done <='1';
+--
+--      When fifth =>
+--        Seqdone <='1';
+--        COUNTER_reset<='1';
+--        Compare_reset<='1';
+--        dataResults <= finnal_result;
+--        maxIndex <= MAXindex_BCD;
+--        
+--      when others=>
+--        seqDone<='0';
+--        data_ready<='0';
+--    END CASE;
+--  END process;
+
+
+
 
 STAGE_RESET:process (clk)
   begin
@@ -220,5 +251,5 @@ MAXindex_BCD(1)<=std_logic_vector(to_unsigned(index_peak/10 mod 10,numWords_bcd(
 MAXindex_BCD(0)<=std_logic_vector(to_unsigned(index_peak/1 mod 10,numWords_bcd(0)'length));
 END process;
 
-ctrlOut <= CtrlOut_reg;
+
 END dataConsume_state;

@@ -1,0 +1,166 @@
+m255
+K4
+z2
+!s11e vcom 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real
+Pcommon_pack
+Z0 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z1 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+!i122 92
+Z2 w1650082933
+Z3 dC:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation
+8C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/common_pack.vhd
+FC:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/common_pack.vhd
+l0
+L4 1
+VRG>9PGHdXCD_fM]lWo13Z2
+!s100 BJ^Y1M8Bo>]Jn`1e6=_lY3
+Z4 OV;C;2020.1;71
+32
+Z5 !s110 1650180733
+!i10b 1
+Z6 !s108 1650180733.000000
+!s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/common_pack.vhd|
+!s107 C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/common_pack.vhd|
+!i113 1
+Z7 o-work work -2002 -explicit
+Z8 tExplicit 1 CvgOpt 0
+Edataconsume
+Z9 w1650180671
+Z10 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
+Z11 DPx4 work 11 common_pack 0 22 RG>9PGHdXCD_fM]lWo13Z2
+R0
+R1
+!i122 93
+R3
+Z12 8C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/dataConsume.vhd
+Z13 FC:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/dataConsume.vhd
+l0
+L6 1
+Va=gQHV[_mB0V]PTN8gk0c3
+!s100 R;m?hz4iD]NO3Y@1ULWIM2
+R4
+32
+R5
+!i10b 1
+R6
+Z14 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/dataConsume.vhd|
+Z15 !s107 C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/dataConsume.vhd|
+!i113 1
+R7
+R8
+Adataconsume_state
+R10
+R11
+R0
+R1
+DEx4 work 11 dataconsume 0 22 a=gQHV[_mB0V]PTN8gk0c3
+!i122 93
+l38
+L23 208
+VF6<AmND^1;0U;>Z`PXce`2
+!s100 ?eS2T;OA?4i_K<@5kgeP50
+R4
+32
+R5
+!i10b 1
+R6
+R14
+R15
+!i113 1
+R7
+R8
+Edatagen
+R2
+R11
+R0
+R1
+!i122 94
+R3
+Z16 8C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/dataGen.vhd
+Z17 FC:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/dataGen.vhd
+l0
+L5 1
+V1bMDfP:igB?f1chI1>SaC3
+!s100 2KmO3BR117LiL0c[ZmJFV2
+R4
+32
+Z18 !s110 1650180734
+!i10b 1
+Z19 !s108 1650180734.000000
+Z20 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/dataGen.vhd|
+Z21 !s107 C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/dataGen.vhd|
+!i113 1
+R7
+R8
+Abehav
+R11
+R0
+R1
+DEx4 work 7 datagen 0 22 1bMDfP:igB?f1chI1>SaC3
+!i122 94
+l19
+L15 37
+Vf]<h?[VJnle9^mTT_RdZg1
+!s100 z^64WNe`A75`L:f3VUAFJ0
+R4
+32
+R18
+!i10b 1
+R19
+R20
+R21
+!i113 1
+R7
+R8
+Etb_datagenconsume
+R2
+R11
+Z22 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+R0
+R1
+!i122 95
+R3
+Z23 8C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/tb_dataConsume_unsigned.vhd
+Z24 FC:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/tb_dataConsume_unsigned.vhd
+l0
+L7 1
+VA8FffZ[@o^dLE:3aL:EQI0
+!s100 f<`BRhezggH93Nj8U3W^f3
+R4
+32
+R18
+!i10b 1
+R19
+Z25 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/tb_dataConsume_unsigned.vhd|
+Z26 !s107 C:/Users/13290/Desktop/Desktop Summary/EEE/Degital design/real/VHDL/peak_detector/Extra file for implementation/tb_dataConsume_unsigned.vhd|
+!i113 1
+R7
+R8
+Atest
+R11
+R22
+R0
+R1
+Z27 DEx4 work 17 tb_datagenconsume 0 22 A8FffZ[@o^dLE:3aL:EQI0
+!i122 95
+l79
+Z28 L10 155
+Z29 V4b;5Y=m^Y2Fm3j8IXI73_0
+Z30 !s100 SzAODVA27M`C2M9GVolnN1
+R4
+32
+R18
+!i10b 1
+R19
+R25
+R26
+!i113 1
+R7
+R8
