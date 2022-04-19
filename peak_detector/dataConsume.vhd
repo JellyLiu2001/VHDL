@@ -23,13 +23,13 @@ use ieee.numeric_std.all;
 architecture dataConsume_state OF dataConsume IS 
   TYPE state_type IS(reset_stage, init, first,haha, second, third, fourth, fIFth);--define state 
  --SIGNAL init,first,second,third,fourth,fIFth:state_type;--SIGNAL of the state
-  SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done,k,D:std_logic;  --erase the COUNTER and comparetor during each cycle.
+  SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done,k,D,kkk:std_logic;  --erase the COUNTER and comparetor during each cycle.
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic :='0';
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
   SIGNAL prefix:char_array_type(0 TO 3);
   SIGNAL CNM:char_array_type(0 TO 2);--è®°peakåä¸ä½
-  SIGNAL suffix:char_array_type(0 to 3);--è®°peakåä¸ä½
+  SIGNAL suffix:char_array_type(0 to 2);--è®°peakåä¸ä½
   SIGNAL finnal_result:char_array_type(0 TO 6);--è®°å¨é¨
   SIGNAL index, index_peak:integer;--è®°ä½ç½®
   SIGNAL DATA_READY : std_logic;
@@ -46,11 +46,7 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
         COUNTER_reset <='1';
         compare_reset <='1';
         nextState <= init;
-        
       WHEN init => -- Wait for start SIGNAL
-
-        COUNTER_done <='0';
-        CtrlOut_reg <='0';
         IF start = '1' THEN
           nextState <= first;
         ELSE
@@ -60,14 +56,12 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
       WHEN first => 
       COUNTER_reset<='0';
       compare_reset<='0';
-      
-      IF ctrlIn_detected ='1' THEN
-        CtrlOut_reg <='0';
 
+      IF ctrlIn_detected ='1' THEN
+        CtrlOut_reg <=CtrlOut_reg;
         nextState <= second;
       ELSE
-
-        CtrlOut_reg <='1';
+        CtrlOut_reg <=not CtrlOut_reg;
       END IF;
 
      -- When haha=>
@@ -80,19 +74,17 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
       --  END IF;
 
       WHEN second => --Set dataready SIGNAL high and give byte
-        CtrlOut_reg <='0';
- 
+
         nextState <= third;
 
       WHEN third =>  --stage to see IF counter 
-        CtrlOut_reg <='0';
-        IF COUNTER = valueofnumwords THEN --All bytes has been counted.
+
+        IF COUNTER > valueofnumwords THEN --All bytes has been counted.
           nextState <= fourth;
         ELSE 
           nextState <= init;--Not all bytes counted, go back to first stage and step to next byte
         END IF;
       WHEN fourth => --All bytes counter, transfer all SIGNAL to cmd, then step to seqdone
- 
         COUNTER_done <='1';
         IF Comparator_done ='1' THEN --wait for shIFter and comparator
           nextState <= fIFth;
@@ -111,7 +103,6 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
     END CASE;
           
   END process;
-
 Handshakeprotocol :process (clk) --initialize
   BEGIN
     IF rising_edge(clk) THEN
@@ -168,10 +159,6 @@ Handshakeprotocol :process (clk) --initialize
 --        data_ready<='0';
 --    END CASE;
 --  END process;
-
-
-
-
 STAGE_RESET:process (clk)
   BEGIN
     IF reset ='1' THEN
@@ -180,7 +167,8 @@ STAGE_RESET:process (clk)
       curState <= nextState  ;
     END IF;
   END process;
-----------------------------------------------------
+----------------------------------------------------   
+
 
 COUNTER_process:process(DATA_READY)--TO calculate the index and compare the peak value. 
 BEGIN
@@ -188,7 +176,6 @@ BEGIN
       COUNTER<=0;
   ELSIF data_ready='1' THEN
       COUNTER <= COUNTER + 1;
-      COUNTER_done<='1';
   END IF;
 END process;  
 
@@ -237,11 +224,10 @@ BEGIN
 	END IF;
 END process;
 ----------------------------------------------------
-data_real_prefix:process(data)
+data_real_prefix:process(clk)
 BEGIN
-CNM<=("00000000","00000000","00000000");
+--CNM<=("00000000","00000000","00000000");
     IF k='1' then
-      d<='0';
       CNM(0)<=prefix(0);
       CNM(1)<=prefix(1);
       CNM(2)<=prefix(2);
@@ -253,20 +239,20 @@ END process;
 
 
 ----------------------------------------------------
---SHIFTER_suffix:process(COUNTER,index_peak) 
---BEGIN
---IF COUNTER-index_peak=0 then
---  suffix(0)<=data;
---ELSIF COUNTER-index_peak=1 then
---  suffix(1)<=data;
---ELSIF COUNTER-index_peak=2 then
---  suffix(2)<=data;
---ELSIF COUNTER-index_peak=3 then
---  suffix(3)<=data;
---  finnal_result(0 to 2)<=prefix;
---  finnal_result(3 to 6)<=suffix;
---END IF;
---END process;
+SHIFTER_suffix:process(COUNTER,index_peak) 
+BEGIN
+IF COUNTER-index_peak=2 then
+  suffix(0)<=data;
+ELSIF COUNTER-index_peak=3 then
+  suffix(1)<=data;
+ELSIF COUNTER-index_peak=4 then
+  suffix(2)<=data;
+ELSE
+  finnal_result(0 to 2)<=cnm;
+  finnal_result(3)<=prefix(3);
+  finnal_result(4 to 6)<=suffix(0 to 2);
+END IF;
+END process;
 
 ----------------------------------------------------
 
@@ -278,4 +264,12 @@ MAXindex_BCD(0)<=std_logic_vector(to_unsigned(index_peak/1 mod 10,numWords_bcd(0
 END process;
 
 
+
+
+done_d:process(counter) 
+BEGIN
+if counter=valueofnumwords then
+kkk<='1';
+end if;
+END process;
 END dataConsume_state;

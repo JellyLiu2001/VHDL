@@ -1,0 +1,189 @@
+m255
+K3
+z0
+!s11e MIXED_VERSIONS
+13
+cModel Technology
+Z0 dO:\vhdl2\VHDL\peak_detector\Data_processor
+T_opt
+Vic]7PTU:7`:CD3b=2Nc4g1
+Z1 04 17 4 work tb_datagenconsume test 1
+=13-e454e8647d48-6259dbf5-1ae-39f0
+Z2 o-quiet -auto_acc_if_foreign -work work +acc
+n@_opt
+OL;O;10.1b;51
+R0
+T_opt1
+!s110 1650331057
+V0zNzdiMRL6SQ<NGC_025`0
+R1
+=8-5405dbf36b90-625e0db1-c-98c
+o-quiet -auto_acc_if_foreign -work work
+Z3 tCvgOpt 0
+n@_opt1
+Z4 OL;O;2020.4;71
+R0
+T_opt2
+!s110 1650385188
+V8G@=kB0dN6MBi8h[A:zPg3
+R1
+=9-5405dbf36b90-625ee123-2e3-2430
+R2
+R3
+n@_opt2
+R4
+Pcommon_pack
+Z5 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z6 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+!i122 673
+Z7 w1650325370
+Z8 dC:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector
+8C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/common_pack.vhd
+FC:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/common_pack.vhd
+l0
+L4 1
+VRG>9PGHdXCD_fM]lWo13Z2
+!s100 BJ^Y1M8Bo>]Jn`1e6=_lY3
+Z9 OL;C;2020.4;71
+32
+!s110 1650385185
+!i10b 1
+Z10 !s108 1650385185.000000
+!s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/common_pack.vhd|
+!s107 C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/common_pack.vhd|
+!i113 0
+Z11 o-work work -2002 -explicit
+Z12 tExplicit 1 CvgOpt 0
+Edataconsume
+Z13 w1650385184
+Z14 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
+Z15 DPx4 work 11 common_pack 0 22 RG>9PGHdXCD_fM]lWo13Z2
+R5
+R6
+!i122 674
+R8
+Z16 8C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataConsume.vhd
+Z17 FC:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataConsume.vhd
+l0
+L6 1
+Va=gQHV[_mB0V]PTN8gk0c3
+!s100 R;m?hz4iD]NO3Y@1ULWIM2
+R9
+32
+Z18 !s110 1650385186
+!i10b 1
+R10
+Z19 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataConsume.vhd|
+Z20 !s107 C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataConsume.vhd|
+!i113 0
+R11
+R12
+Adataconsume_state
+R14
+R15
+R5
+R6
+DEx4 work 11 dataconsume 0 22 a=gQHV[_mB0V]PTN8gk0c3
+!i122 674
+l38
+L23 253
+VZ@jckE0A^Koz:32X0WoAD0
+!s100 bbmDOT=:c`AThF`1XZHJa3
+R9
+32
+R18
+!i10b 1
+R10
+R19
+R20
+!i113 0
+R11
+R12
+Edatagen
+R7
+R15
+R5
+R6
+!i122 675
+R8
+Z21 8C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataGen.vhd
+Z22 FC:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataGen.vhd
+l0
+L5 1
+V1bMDfP:igB?f1chI1>SaC3
+!s100 2KmO3BR117LiL0c[ZmJFV2
+R9
+32
+R18
+!i10b 1
+Z23 !s108 1650385186.000000
+Z24 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataGen.vhd|
+Z25 !s107 C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataGen.vhd|
+!i113 0
+R11
+R12
+Abehav
+R15
+R5
+R6
+DEx4 work 7 datagen 0 22 1bMDfP:igB?f1chI1>SaC3
+!i122 675
+l19
+L15 37
+Vf]<h?[VJnle9^mTT_RdZg1
+!s100 z^64WNe`A75`L:f3VUAFJ0
+R9
+32
+R18
+!i10b 1
+R23
+R24
+R25
+!i113 0
+R11
+R12
+Etb_datagenconsume
+R7
+R15
+Z26 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+R5
+R6
+!i122 676
+R8
+Z27 8C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+Z28 FC:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd
+l0
+L7 1
+VA8FffZ[@o^dLE:3aL:EQI0
+!s100 f<`BRhezggH93Nj8U3W^f3
+R9
+32
+R18
+!i10b 1
+R23
+Z29 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd|
+Z30 !s107 C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/tb_dataConsume_unsigned.vhd|
+!i113 0
+R11
+R12
+Atest
+R15
+R26
+R5
+R6
+DEx4 work 17 tb_datagenconsume 0 22 A8FffZ[@o^dLE:3aL:EQI0
+!i122 676
+l79
+L10 155
+V4b;5Y=m^Y2Fm3j8IXI73_0
+!s100 SzAODVA27M`C2M9GVolnN1
+R9
+32
+R18
+!i10b 1
+R23
+R29
+R30
+!i113 0
+R11
+R12
