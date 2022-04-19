@@ -44,9 +44,13 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
     CASE curState IS 
       when reset_stage =>
         COUNTER_reset <='1';
-        compare_reset <='1';
+        compare_reset <='1'; 
+        SeqDone <='0';
         nextState <= init;
+        
       WHEN init => -- Wait for start SIGNAL
+        COUNTER_reset<='0';
+        compare_reset<='0';
         IF start = '1' THEN
           nextState <= first;
         ELSE
@@ -54,8 +58,6 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
         END IF;
         
       WHEN first => 
-      COUNTER_reset<='0';
-      compare_reset<='0';
 
       IF ctrlIn_detected ='1' THEN
         CtrlOut_reg <=CtrlOut_reg;
@@ -79,25 +81,23 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
 
       WHEN third =>  --stage to see IF counter 
 
-        IF COUNTER > valueofnumwords THEN --All bytes has been counted.
+        IF COUNTER = valueofnumwords THEN --All bytes has been counted.
           nextState <= fourth;
         ELSE 
           nextState <= init;--Not all bytes counted, go back to first stage and step to next byte
         END IF;
       WHEN fourth => --All bytes counter, transfer all SIGNAL to cmd, then step to seqdone
         COUNTER_done <='1';
-        IF Comparator_done ='1' THEN --wait for shIFter and comparator
+        IF kkk ='1' THEN --wait for shIFter and comparator
           nextState <= fIFth;
         ELSE
           nextState <= fourth;
         END IF;
       When fIFth => --complete, give seqDone high SIGNAL
         Seqdone <='1';
-        COUNTER_reset<='1';
-        Compare_reset<='1';
         dataResults <= finnal_result;
         maxIndex <= MAXindex_BCD;
-        nextState <= init; 
+        nextState <= reset_stage; 
       When others =>
         seqDone<='0';
     END CASE;
@@ -170,10 +170,10 @@ STAGE_RESET:process (clk)
 ----------------------------------------------------   
 
 
-COUNTER_process:process(DATA_READY)--TO calculate the index and compare the peak value. 
+COUNTER_process:process(DATA_READY,COUNTER_reset;)--TO calculate the index and compare the peak value. 
 BEGIN
   IF COUNTER_reset='1' THEN
-      COUNTER<=0;
+      COUNTER <=0;
   ELSIF data_ready='1' THEN
       COUNTER <= COUNTER + 1;
   END IF;
@@ -264,14 +264,12 @@ MAXindex_BCD(0)<=std_logic_vector(to_unsigned(index_peak/1 mod 10,numWords_bcd(0
 END process;
 
 
-END dataConsume_state;
-
-done_d:process(index_peak) 
-BEGIN
-if counter=valueofnumwords then
-kkk<='1';
-end if;
+done_d:process(counter,clk) 
+BEGIN 
+  if counter=valueofnumwords then
+  kkk<='1';
+else
+  kkk<='0';
+  end if;
 END process;
-
-
 END dataConsume_state;
