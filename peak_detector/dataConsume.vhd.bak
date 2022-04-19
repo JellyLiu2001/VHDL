@@ -21,14 +21,14 @@ use ieee.numeric_std.all;
   END dataConsume;
 
 architecture dataConsume_state OF dataConsume IS 
-  TYPE state_type IS(reset_stage, init, first,haha, second, third, fourth, fifth);--define state 
- --SIGNAL init,first,second,third,fourth,fifth:state_type;--SIGNAL of the state
-  SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done,k:std_logic;  --erase the COUNTER and comparetor during each cycle.
+  TYPE state_type IS(reset_stage, init, first,haha, second, third, fourth, fIFth);--define state 
+ --SIGNAL init,first,second,third,fourth,fIFth:state_type;--SIGNAL of the state
+  SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done,k,D:std_logic;  --erase the COUNTER and comparetor during each cycle.
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic :='0';
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
   SIGNAL prefix:char_array_type(0 TO 3);
-  SIGNAL data_prefix:char_array_type(0 TO 2);--è®°peakåä¸ä½
+  SIGNAL CNM:char_array_type(0 TO 2);--è®°peakåä¸ä½
   SIGNAL suffix:char_array_type(0 to 3);--è®°peakåä¸ä½
   SIGNAL finnal_result:char_array_type(0 TO 6);--è®°å¨é¨
   SIGNAL index, index_peak:integer;--è®°ä½ç½®
@@ -38,6 +38,7 @@ architecture dataConsume_state OF dataConsume IS
 BEGIN 
 valueofnumwords <= TO_INTEGER(unsigned(numWords_bcd(0))) + TO_INTEGER(unsigned(numWords_bcd(1))) *10 + TO_INTEGER(unsigned(numWords_bcd(2))) * 100;--transfer BCD to integer
 ctrlIn_detected <= ctrlIn xor ctrlIn_delayed;
+
 combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Comparator_done)
   BEGIN           
     CASE curState IS 
@@ -64,7 +65,7 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
         CtrlOut_reg <='0';
 
         nextState <= second;
-      Else
+      ELSE
 
         CtrlOut_reg <='1';
       END IF;
@@ -72,7 +73,7 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
      -- When haha=>
    -- IF ctrlIn_detected='1' THEN
      -- nextState <= first;
---    ElSIF ctrlIn_detected='0' THEN
+--    ELSIF ctrlIn_detected='0' THEN
      -- nextState <= haha;
        -- ELSE
         --  nextState <= init;
@@ -83,22 +84,22 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
  
         nextState <= third;
 
-      WHEN third =>  --stage to see if counter 
+      WHEN third =>  --stage to see IF counter 
         CtrlOut_reg <='0';
         IF COUNTER = valueofnumwords THEN --All bytes has been counted.
           nextState <= fourth;
-        Else 
+        ELSE 
           nextState <= init;--Not all bytes counted, go back to first stage and step to next byte
         END IF;
       WHEN fourth => --All bytes counter, transfer all SIGNAL to cmd, then step to seqdone
  
         COUNTER_done <='1';
-        IF Comparator_done ='1' THEN --wait for shifter and comparator
-          nextState <= fifth;
-        Else
+        IF Comparator_done ='1' THEN --wait for shIFter and comparator
+          nextState <= fIFth;
+        ELSE
           nextState <= fourth;
         END IF;
-      When fifth => --complete, give seqDone high SIGNAL
+      When fIFth => --complete, give seqDone high SIGNAL
         Seqdone <='1';
         COUNTER_reset<='1';
         Compare_reset<='1';
@@ -112,7 +113,7 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
   END process;
 
 Handshakeprotocol :process (clk) --initialize
-  begin
+  BEGIN
     IF rising_edge(clk) THEN
       ctrlIn_delayed <= ctrlIn;
       ctrlOut <= CtrlOut_reg;
@@ -124,7 +125,7 @@ Handshakeprotocol :process (clk) --initialize
 --      ELSE
 --        IF curState = first THEN
 --          ctrlOut_reg <= not ctrlOut_reg;
---        else
+--        ELSE
 --          ctrlOut_reg <= ctrlOut_reg;
 --        END IF;
 --      END IF;
@@ -132,7 +133,7 @@ Handshakeprotocol :process (clk) --initialize
   END PROCESS;
       
 --Control_SIGNAL :process (curstate)
---  begin
+--  BEGIN
 --    DATA_READY <='0';
 --    COUNTER_reset<='0';
 --    compare_reset<='0';
@@ -155,7 +156,7 @@ Handshakeprotocol :process (clk) --initialize
 --      when fourth =>
 --        COUNTER_done <='1';
 --
---      When fifth =>
+--      When fIFth =>
 --        Seqdone <='1';
 --        COUNTER_reset<='1';
 --        Compare_reset<='1';
@@ -172,7 +173,7 @@ Handshakeprotocol :process (clk) --initialize
 
 
 STAGE_RESET:process (clk)
-  begin
+  BEGIN
     IF reset ='1' THEN
       curState <= INIT;
     ELSIF rising_edge (clk) and reset='0' THEN
@@ -197,68 +198,74 @@ SHIFTER_prefix:process(data,clk)
 BEGIN
 IF reset='1' THEN
 prefix<=("00000000","00000000","00000000","00000000");
-elsIF rising_edge(clk) and ctrlIn_detected='1' THEN
-	if k='0' then
+ELSIF rising_edge(clk) and ctrlIn_detected='1' THEN
+	IF k='0' then
    	 	for i in 0 TO 2 loop
       			prefix(i)<=prefix(i+1);
     		END loop;
       		prefix(2)<=data;--peak
-	else
+	ELSE
 		prefix(3)<=data;
-	End if;
+	END IF;
 SHIFTER_prefix_done<='1';
 END IF;
 END process;
 
 --------------------------------------------------
-COMPARATOR_process:process(clk,data)
+COMPARATOR_process:process(clk)
 BEGIN
-if rising_edge(clk)  THEN
-    IF k<='1' THEN
+IF rising_edge(clk)  THEN
+    IF k='1' THEN
  	index_peak<=COUNTER;
       	COMPARATOR_done<='1';
-     else
+     ELSE
       COMPARATOR_done<='0';
-	end if;
-elsif compare_reset='1' THEN
+	END IF;
+ELSIF compare_reset='1' THEN
   index_peak<=0;
 END IF;
 END process;
 
 --------------------------------------------------
 KK:process(clk,data)
-begin
-if data>prefix(3) then
-k<='1';
-else
-k<='0';
-end if;
-end process;
+
+BEGIN
+	IF data>prefix(3) then
+		k<='1';
+	ELSE
+		k<='0';
+	END IF;
+END process;
 ----------------------------------------------------
-data_real_prefix:process(k)
-begin
-if k<='1' then
-data_prefix(0)<=prefix(0);
-data_prefix(1)<=prefix(1);
-data_prefix(2)<=prefix(2);
-end if;
-end process;
+data_real_prefix:process(clk)
+BEGIN
+CNM<=("00000000","00000000","00000000");
+    IF k='1' then
+      d<='0';
+      CNM(0)<=prefix(0);
+      CNM(1)<=prefix(1);
+      CNM(2)<=prefix(2);
+	d<='1';
+else
+	d<='0';
+    END IF;
+END process;
 
 
 ----------------------------------------------------
 --SHIFTER_suffix:process(COUNTER,index_peak) 
 --BEGIN
---if COUNTER-index_peak=0 then
+--IF COUNTER-index_peak=0 then
 --  suffix(0)<=data;
---elsif COUNTER-index_peak=1 then
+--ELSIF COUNTER-index_peak=1 then
 --  suffix(1)<=data;
---elsif COUNTER-index_peak=2 then
+--ELSIF COUNTER-index_peak=2 then
 --  suffix(2)<=data;
---elsif COUNTER-index_peak=3 then
+--ELSIF COUNTER-index_peak=3 then
 --  suffix(3)<=data;
 --  finnal_result(0 to 2)<=prefix;
 --  finnal_result(3 to 6)<=suffix;
---END if;
+--END IF;
 --END process;
 
 ----------------------------------------------------
