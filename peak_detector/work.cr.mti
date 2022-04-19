@@ -1,19 +1,9 @@
-C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/common_pack.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none {C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\common_pack.vhd}
+C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/common_pack.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/common_pack.vhd
 Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Compiling package common_pack
-
-} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataConsume.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none {C:\Users\Jelly\Desktop\vhdl2\VHDL\peak_detector\dataConsume.vhd}
-Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package common_pack
--- Loading package NUMERIC_STD
--- Compiling entity dataConsume
--- Compiling architecture dataConsume_state of dataConsume
 
 } {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataGen.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/peak_detector/dataGen.vhd
 Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020

@@ -27,7 +27,8 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic :='0';
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
-  SIGNAL prefix:char_array_type(0 TO 3);--è®°peakåä¸ä½
+  SIGNAL prefix:char_array_type(0 TO 3);
+  SIGNAL data_prefix:char_array_type(0 TO 2);--è®°peakåä¸ä½
   SIGNAL suffix:char_array_type(0 to 3);--è®°peakåä¸ä½
   SIGNAL finnal_result:char_array_type(0 TO 6);--è®°å¨é¨
   SIGNAL index, index_peak:integer;--è®°ä½ç½®
@@ -197,13 +198,12 @@ BEGIN
 IF reset='1' THEN
 prefix<=("00000000","00000000","00000000","00000000");
 elsIF rising_edge(clk) and ctrlIn_detected='1' THEN
-	k<='0';
 	if k='0' then
    	 	for i in 0 TO 2 loop
       			prefix(i)<=prefix(i+1);
     		END loop;
       		prefix(2)<=data;--peak
-	elsif k='1' then
+	else
 		prefix(3)<=data;
 	End if;
 SHIFTER_prefix_done<='1';
@@ -211,26 +211,41 @@ END IF;
 END process;
 
 --------------------------------------------------
-COMPARATOR_process:process(clk,data)
+COMPARATOR_process:process(clk)
 BEGIN
-
-IF compare_reset='1' THEN
-  index_peak<=0;
-
-ELSIF rising_edge(clk) THEN
-    IF data > prefix(3) THEN
-	k<='1';
-      index_peak<=COUNTER;
-      COMPARATOR_done<='1';
-     	ELSE
-	k<='0';
+if rising_edge(clk)  THEN
+    IF k<='1' THEN
+ 	index_peak<=COUNTER;
+      	COMPARATOR_done<='1';
+     else
       COMPARATOR_done<='0';
-    END IF;
+	end if;
+elsif compare_reset='1' THEN
+  index_peak<=0;
 END IF;
 END process;
 
 --------------------------------------------------
+KK:process(clk,data)
+begin
+if data>prefix(3) then
+k<='1';
+else
+k<='0';
+end if;
+end process;
+----------------------------------------------------
+data_real_prefix:process(k)
+begin
+if k<='1' then
+data_prefix(0)<=prefix(0);
+data_prefix(1)<=prefix(1);
+data_prefix(2)<=prefix(2);
+end if;
+end process;
 
+
+----------------------------------------------------
 --SHIFTER_suffix:process(COUNTER,index_peak) 
 --BEGIN
 --if COUNTER-index_peak=0 then
