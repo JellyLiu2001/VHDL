@@ -1,0 +1,82 @@
+C:/Users/Jelly/Desktop/vhdl2/VHDL/common_pack.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/common_pack.vhd
+Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling package common_pack
+
+} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/UART_TX_CTRL.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/UART_TX_CTRL.vhd
+Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity UART_TX_CTRL
+-- Compiling architecture Behavioral of UART_TX_CTRL
+
+} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/dataConsume_unsigned.vhdp {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/dataConsume_unsigned.vhdp
+Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling package dataConsume_pack
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package dataConsume_pack
+-- Loading package common_pack
+-- Compiling entity dataConsume
+
+} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/dataGen.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/dataGen.vhd
+Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package common_pack
+-- Compiling entity dataGen
+-- Compiling architecture behav of dataGen
+
+} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/tb_CmdProcessor.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/tb_CmdProcessor.vhd
+Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package common_pack
+-- Compiling entity tb_cmdProc_interim
+-- Compiling architecture testbench of tb_cmdProc_interim
+
+} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/comparator1.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/comparator1.vhd
+Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package common_pack
+-- Compiling entity comparator
+-- Compiling architecture unsigned_int of comparator
+
+} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/UART_RX_CTRL.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/UART_RX_CTRL.vhd
+Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity UART_RX_CTRL
+-- Compiling architecture RCVR of UART_RX_CTRL
+
+} {} {}} C:/Users/Jelly/Desktop/vhdl2/VHDL/finalcmd.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/Jelly/Desktop/vhdl2/VHDL/finalcmd.vhd
+Model Technology ModelSim SE-64 vcom 2020.4 Compiler 2020.10 Oct 13 2020
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package common_pack
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity cmdProc
+-- Compiling architecture dataflow of cmdProc
+
+} {} {}}

@@ -23,7 +23,7 @@ use ieee.numeric_std.all;
 architecture dataConsume_state OF dataConsume IS 
   TYPE state_type IS(reset_stage, init, first,haha, second, third, fourth, fIFth);--define state 
  --SIGNAL init,first,second,third,fourth,fIFth:state_type;--SIGNAL of the state
-  SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done,k,D,kkk:std_logic;  --erase the COUNTER and comparetor during each cycle.
+  SIGNAL COUNTER_reset,compare_reset,COUNTER_done,SHIFTER_prefix_done,COMPARATOR_done,data_real_prefix_reset,k,D,kkk:std_logic;  --erase the COUNTER and comparetor during each cycle.
   SIGNAL ctrlIn_detected, ctrlIn_delayed,ctrlOut_reg:std_logic :='0';
   SIGNAL MAXindex_BCD:BCD_ARRAY_TYPE(2 downto 0);--store the maximum number's index.
   SIGNAL COUNTER : integer:=0;--counting the number and store as index. 
@@ -47,6 +47,7 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
         compare_reset <='1'; 
         SeqDone <='0';
         nextState <= init;
+	data_real_prefix_reset<='1';
         
       WHEN init => -- Wait for start SIGNAL
         COUNTER_reset<='0';
@@ -66,14 +67,6 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
         CtrlOut_reg <=not CtrlOut_reg;
       END IF;
 
-     -- When haha=>
-   -- IF ctrlIn_detected='1' THEN
-     -- nextState <= first;
---    ELSIF ctrlIn_detected='0' THEN
-     -- nextState <= haha;
-       -- ELSE
-        --  nextState <= init;
-      --  END IF;
 
       WHEN second => --Set dataready SIGNAL high and give byte
 
@@ -93,7 +86,7 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
         ELSE
           nextState <= fourth;
         END IF;
-      When fIFth => --complete, give seqDone high SIGNAL
+      When Fifth => --complete, give seqDone high SIGNAL
         Seqdone <='1';
         dataResults <= finnal_result;
         maxIndex <= MAXindex_BCD;
@@ -170,7 +163,7 @@ STAGE_RESET:process (clk)
 ----------------------------------------------------   
 
 
-COUNTER_process:process(DATA_READY,COUNTER_reset;)--TO calculate the index and compare the peak value. 
+COUNTER_process:process(DATA_READY,COUNTER_reset)--TO calculate the index and compare the peak value. 
 BEGIN
   IF COUNTER_reset='1' THEN
       COUNTER <=0;
@@ -215,7 +208,6 @@ END process;
 
 --------------------------------------------------
 KK:process(clk,data)
-
 BEGIN
 	IF data>prefix(3) then
 		k<='1';
@@ -226,7 +218,9 @@ END process;
 ----------------------------------------------------
 data_real_prefix:process(clk)
 BEGIN
---CNM<=("00000000","00000000","00000000");
+if data_real_prefix_reset<='1' then
+CNM<=("00000000","00000000","00000000");
+else
     IF k='1' then
       CNM(0)<=prefix(0);
       CNM(1)<=prefix(1);
@@ -235,6 +229,7 @@ BEGIN
 else
 	d<='0';
     END IF;
+end if;
 END process;
 
 
