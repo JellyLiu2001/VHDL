@@ -194,11 +194,11 @@ BEGIN
 if shifter_reset='1' then
 suffix<=("00000000","00000000","00000000");
 else
-  IF COUNTER-index_peak=2 then
+  IF COUNTER-index_peak=1 then
     suffix(0)<=data;
-  ELSIF COUNTER-index_peak=3 then
+  ELSIF COUNTER-index_peak=2 then
     suffix(1)<=data;
-  ELSIF COUNTER-index_peak=4 then
+  ELSIF COUNTER-index_peak=3 then
     suffix(2)<=data;
   ELSE
     finnal_result(0 to 2)<=real_prefix;
