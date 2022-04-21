@@ -30,7 +30,7 @@ architecture dataConsume_state OF dataConsume IS
   SIGNAL prefix:char_array_type(0 TO 3);
   SIGNAL real_prefix:char_array_type(0 TO 2);--è®°peakåä¸ä½
   SIGNAL suffix:char_array_type(0 to 2);--è®°peakåä¸ä½
-  SIGNAL finnal_result:char_array_type(0 TO 6);--è®°å¨é¨
+  SIGNAL final_result:char_array_type(0 TO 6);--è®°å¨é¨
   SIGNAL index_peak:integer;--è®°ä½ç½®
   SIGNAL DATA_READY : std_logic;
   SIGNAL curstate, nextstate:state_type; 
@@ -87,7 +87,7 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
         END IF;
       When Fifth => --complete, give seqDone high SIGNAL
         Seqdone <='1';
-        dataResults <= finnal_result;
+        dataResults <= final_result;
         maxIndex <= MAXindex_BCD;
         nextState <= reset_stage; 
       When others =>
@@ -201,9 +201,9 @@ else
   ELSIF COUNTER-index_peak=3 then
     suffix(2)<=data;
   ELSE
-    finnal_result(0 to 2)<=real_prefix;
-    finnal_result(3)<=prefix(3);
-    finnal_result(4 to 6)<=suffix(0 to 2);
+    final_result(0 to 2)<=real_prefix;
+    final_result(3)<=prefix(3);
+    final_result(4 to 6)<=suffix(0 to 2);
     end if;
 END IF;
 END process;
