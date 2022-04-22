@@ -116,12 +116,12 @@ STAGE_RESET:process (clk)
     END IF;
   END process;
 ----------------------------------------------------   
---????????CODE BY JELLY JINZHE LIU????????--
+--Process CODE BY JELLY JINZHE LIU????????--
 ----------------------------------------------------   
 COUNTER_process:process(DATA_READY,COUNTER_reset)--TO calculate the index.
 BEGIN
   IF COUNTER_reset='1' THEN--reset to zero
-      COUNTER <=0;
+      COUNTER <=-1;
   ELSIF data_ready='1' THEN--IF dataready which means the new data has came.
       COUNTER <= COUNTER + 1;--the counter plus one.
   END IF;
