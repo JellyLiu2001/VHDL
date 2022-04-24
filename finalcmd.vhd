@@ -186,7 +186,7 @@ begin
               end if;
             end if;
       
-      When count_N =>     
+      When count_N =>
       
       if rxNow = '1' then
        if rxData >="00110000" and rxData<="00111001" then------check if the next input after "A" or "a" is 0-9
@@ -255,11 +255,13 @@ begin
             
 -------------------------------------------------------------------------------------------------
       When Give_data => --------------------
-        
+        if seqDone='1' then
+          nextState <= S0_INIT;
+        else
         
             nextState <= recieve_byte;
         
-      
+        end if;
       When  recieve_byte =>
           if dataReady ='1' then
             if byte(7 downto 4) < "1010" then    ---------first 4 bits represents from 0-9
@@ -292,12 +294,12 @@ begin
         if seqDone='1' then
           nextState <= stop_print;
         else
-        
         nextState <= recieve_byte_2;
-      
         end if;
       When recieve_byte_2 =>
-        if txdone='1' then
+        if seqDone='1' then
+          nextState <= S0_INIT;
+        elsif txdone='1' then
             if byte(3 downto 0) < "1010" then    ---------last 4 bits represents from 0-9
                 R(7 downto 4)<="0011";
                 R(3 downto 0) <= byte(3 downto 0);
@@ -326,9 +328,12 @@ begin
           
         
       When Print_byte_two =>
-        if txdone ='1' then
+        if seqDone='1' then
+          nextState <= S0_INIT;
+        elsif txdone ='1' then
         
           nextState <= recieve_space;
+        
         else
            nextState <= Print_byte_two;
         end if;
@@ -664,7 +669,6 @@ begin
       
       
       When  recieve_byte =>
-          start <='0';
           txNow <='0';
       When Print_byte_one =>
         txData<= register2 (7 downto 0);
@@ -672,7 +676,7 @@ begin
       When recieve_byte_2 =>
           txNow <= '0' ;   
       When Print_byte_two => 
-        
+        start <='0';
         txData <= register2(7 downto 0);
         txNow <='1';
       
@@ -978,6 +982,3 @@ begin
   END PROCESS; -- seq  
   
 END dataflow;
-
-
-
