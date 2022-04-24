@@ -298,7 +298,7 @@ begin
         end if;
       When recieve_byte_2 =>
         if seqDone='1' then
-          nextState <= S0_INIT;
+          nextState <= stop_print;
         elsif txdone='1' then
             if byte(3 downto 0) < "1010" then    ---------last 4 bits represents from 0-9
                 R(7 downto 4)<="0011";
