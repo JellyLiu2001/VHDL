@@ -64,7 +64,7 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
         CtrlOut_reg <=CtrlOut_reg;
         nextState <= second;
       ELSE
-        CtrlOut_reg <=not CtrlOut_reg;
+        CtrlOut_reg <=not CtrlOut_reg after 1ns;
       END IF;
 
 
