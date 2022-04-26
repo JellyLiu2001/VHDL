@@ -48,8 +48,8 @@ architecture dataflow of cmdProc is
   
     signal encount2, counterRST2:std_logic;-----counternum signal
     signal  R,register2:std_logic_vector(11 downto 0);----signal used in register to save input
-    function BtoH1 (binaryNum:std_logic_vector (7 downto 0):="00000000") 
-       return std_logic_vector is 
+    function BtoH1 (binaryNum:std_logic_vector (7 downto 0):="00000000") ----I learn how to write function online and design this function.This function can get first 
+       return std_logic_vector is                                        ----number of hexadecimal number
     variable hexNum1 : std_logic_vector(7 downto 0):="00000000"; 
     variable midNum1 :  std_logic_vector(3 downto 0):="0000";
     
@@ -91,7 +91,7 @@ architecture dataflow of cmdProc is
      return hexNum1;
   end BtoH1;
   
-  function BtoH2 (binaryNum:std_logic_vector (7 downto 0):="00000000") 
+  function BtoH2 (binaryNum:std_logic_vector (7 downto 0):="00000000") ----can get second number of hexadecimal number 
        return std_logic_vector is 
     variable hexNum1 : std_logic_vector(7 downto 0):="00000000"; 
     variable midNum1 :  std_logic_vector(3 downto 0):="0000";
@@ -158,10 +158,10 @@ begin
               end if;
               
             elsif rxData= "01010000" or rxdata="01110000" THEN-----P/p
-              if ifANNN > 0 then                    
+              if ifANNN > 0 then      ----if we have run ANNN before we can go to S2_PEAK              
                 nextState <= S2_PEAK;
                 
-              elsif ifANNN=0 then
+              elsif ifANNN=0 then     ----if we have not run ANNN before we should go back to S0_INIT
                 nextState <= S0_INIT;
                 
               end if;
@@ -170,10 +170,10 @@ begin
 
          
             ELSIF rxData="01001100" or rxdata="01101100" THEN ------L/l
-              if ifANNN > 0 then
+              if ifANNN > 0 then      ----if we have run ANNN before we can go to S2_PEAK
                 nextState <=S3_LIST;
                 
-              elsif ifANNN=0 then
+              elsif ifANNN=0 then     ----if we have not run ANNN before we should go back to S0_INIT
                 nextState <= S0_INIT;
                 
               end if;   
@@ -411,12 +411,12 @@ begin
           nextState <= r_print;
        end if;
 ------------------------------------------------------------------------------------------------------------      
-      WHEN  S2_PEAK => 
+      WHEN  S2_PEAK => ----this is start of P/p
           nextState <= Print_P;
           
       
           
-      when Print_P =>
+      when Print_P =>-----print P/p there
        
           nextState <= P_wait;
           
@@ -428,7 +428,7 @@ begin
         if txdone='1' then 
            nextState <= Print_LF;
         end if; 
-      when Print_LF =>
+      when Print_LF =>-----output LF
        
           nextState <= LF_wait;
           
@@ -439,14 +439,14 @@ begin
         if txdone='1' then 
           nextState <=Print_CR;
         end if;
-      when Print_CR =>
+      when Print_CR =>-----output CR
        
           nextState <= CR_wait;
           
       when CR_wait =>
           nextState <=CR_HOLD;
         
-      when CR_HOLD =>  
+      when CR_HOLD =>  ------L and P share same states to output LF and CR
       
         if txdone='1' then 
           if rxData= "01010000" or rxdata="01110000" then
@@ -456,7 +456,7 @@ begin
           end if;
         end if;   
           
-      WHEN PEAK1=>
+      WHEN PEAK1=>---print first number of peek
           
             nextState <= PEAK1_wait;
           
@@ -467,7 +467,7 @@ begin
         if txdone='1' then
           nextState<= PEAK2;
         end if;  
-      when PEAK2=>
+      when PEAK2=>----print second number of peek
           
             nextState <=PEAK2_wait;
       when PEAK2_wait=>
@@ -477,7 +477,7 @@ begin
         if txdone='1' then
           nextState<= SPACE;
         end if;
-      when SPACE=>
+      when SPACE=>----print space
           
             nextState <= SPACE_wait;
       when SPACE_wait=>
@@ -487,7 +487,7 @@ begin
         if txdone='1' then
           nextState<= INDEX1;   
         end if;   
-      when INDEX1=>
+      when INDEX1=>----print first index
           
             nextState <= INDEX1_wait;
       when INDEX1_wait=>
@@ -498,7 +498,7 @@ begin
         if txdone='1' then
           nextState<= INDEX2;
         end if;  
-      when INDEX2=>
+      when INDEX2=>----print second index
           
             nextState <= INDEX2_wait;
       when INDEX2_wait=>
@@ -510,7 +510,7 @@ begin
           nextState<= INDEX3;
         end if; 
           
-      when INDEX3=>
+      when INDEX3=>----print third index
           
             nextState <=INDEX3_wait ;
           
@@ -520,12 +520,12 @@ begin
             nextState <=S0_INIT ;
         end if;
 ---------------------------------------------------------------------------------------         
-      WHEN  S3_LIST =>
+      WHEN  S3_LIST =>-----start of List
          nextState <= Print_L;
          
       
          
-      when Print_L =>
+      when Print_L =>----print L/l
           
              nextState <=L_wait;
                       
@@ -536,12 +536,12 @@ begin
         if txdone='1' then
          nextState <= Print_LF;
         end if;
-      when S3_HOLD =>      
+      when S3_HOLD =>      ----start of loop
         nextState <= List1;
         encounterList<='0';
         
       
-      when List1=>  
+      when List1=>  ----print first number of current List number
          
             nextState <= List1_wait;
       when List1_wait=>
@@ -551,7 +551,7 @@ begin
         if txdone='1' then
           nextState <= List2;  
         end if; 
-      when List2=>  
+      when List2=>  ----print second number of current List number
          
             nextState <= List2_wait;
       when List2_wait=>
@@ -561,7 +561,7 @@ begin
         if txdone='1' then
           nextState <= SPACEL;
         end if;  
-      when SPACEL=>
+      when SPACEL=>---print space
 
           
           
@@ -573,10 +573,10 @@ begin
       when SPACEL_HOLD=>
         if txdone='1' then
             encounterList<='1';
-           if COUNT_LIST < 6 then
+           if COUNT_LIST < 6 then----this means the 7 numbers of list have not yet been print completely so we go back and repeat
             nextState <=S3_HOLD;
             
-          elsif COUNT_LIST = 6 then
+          elsif COUNT_LIST = 6 then----this means we have already print all 7 numbers 
             nextState <= S0_INIT;
             resetList<='1';
             encounterList<='0';
@@ -871,7 +871,7 @@ begin
 
         COUNT_NUM <= 0; 
         
-    ELSIF reset='1' THEN
+    ELSIF reset='1' THEN   
           
          COUNT_NUM <= 0; 
         
@@ -912,7 +912,7 @@ begin
 
   END PROCESS;
 
-  dataResultR_maxIndexR: process ( reset,seqDone)
+  dataResultR_maxIndexR: process ( reset,seqDone)------register of dataResults and maxIndex
       BEGIN
         if reset='1' then
           dataResultsR(0) <= "00000000";
@@ -927,7 +927,7 @@ begin
           maxIndexR(1) <= "0000";
           maxIndexR(2) <= "0000";
       
-        elsif seqDone = '1' then
+        elsif seqDone = '1' then 
           dataResultsR <= dataResults;
           maxIndexR <= maxIndex;
           
@@ -943,7 +943,7 @@ begin
  
  
          
-  IF_A: PROCESS(reset, clk,seqDone)
+  IF_A: PROCESS(reset, clk,seqDone)--------counter of ANNN running. ifANNN>0 means we have already run ANNN before so L and P is valid
 
   BEGIN
 
