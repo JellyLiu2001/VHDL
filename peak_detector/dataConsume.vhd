@@ -95,11 +95,19 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
     END CASE;
           
   END process;
+	    
 Handshakeprotocol :process (clk) --initialize
   BEGIN
     IF rising_edge(clk) THEN
       ctrlIn_delayed <= ctrlIn;
       ctrlOut <= CtrlOut_reg;
+
+    END IF;
+  END PROCESS;
+	    
+Autoupdate: process(clk)--Update every rising clk
+  BEGIN
+    IF rising_edge(clk) THEN
       byte <= data;
       DATA_ready <= CtrlIn_detected;
       dataready<=DATA_READY;
