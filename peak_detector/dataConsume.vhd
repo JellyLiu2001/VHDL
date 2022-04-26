@@ -61,10 +61,10 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
       WHEN first => 
 
       IF ctrlIn_detected ='1' THEN
-        CtrlOut_reg <=CtrlOut_reg;
+        CtrlOut_reg <=CtrlOut_reg; -- if ctrlIn_detected in dataconsume.vhd triggered, handshake protocol success
         nextState <= second;
       ELSE
-        CtrlOut_reg <=not CtrlOut_reg after 1ns;
+        CtrlOut_reg <=not CtrlOut_reg after 1ns; --change ctrlOur_reg to trigger CtrlIn_detected in data generator high
       END IF;
 
 
@@ -72,7 +72,7 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
 
         nextState <= third;
 
-      WHEN third =>  --stage to see IF counter 
+      WHEN third =>  --stage to see if counter reaches ANNN
 
         IF COUNTER = valueofnumwords THEN --All bytes has been counted.
           nextState <= fourth;
@@ -86,7 +86,7 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
           nextState <= fourth;
         END IF;
       When Fifth => --complete, give seqDone high SIGNAL
-        Seqdone <='1';
+        Seqdone <='1'; -- give seqdone high signal and assign value
         dataResults <= finnal_result;
         maxIndex <= MAXindex_BCD;
         nextState <= reset_stage; 
@@ -98,8 +98,8 @@ combi_nextState:process(curState, start, reset, COUNTER, CtrlIn_detected, Compar
 	    
 Handshakeprotocol :process (clk) --initialize
   BEGIN
-    IF rising_edge(clk) THEN
-      ctrlIn_delayed <= ctrlIn;
+    IF rising_edge(clk) THEN --Every rising edge assign CtrlIn and CtrlOut_reg to its time_delay version to trigger XOR logic in CtrlIn_detected
+      ctrlIn_delayed <= ctrlIn; 
       ctrlOut <= CtrlOut_reg;
 
     END IF;
@@ -115,7 +115,7 @@ Autoupdate: process(clk)--Update every rising clk
   END PROCESS;
       
 
-STAGE_RESET:process (clk)
+STAGE_RESET:process (clk) -- Progress the program each clock
   BEGIN
     IF reset ='1' THEN
       curState <= INIT;
