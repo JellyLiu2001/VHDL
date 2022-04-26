@@ -863,14 +863,18 @@ begin
   -------------------------------------------------------------
   -----------------------------------------------
   -------------------
-  COUNTER_NUM: PROCESS( clk)  ---------------------------this counter one of the function is to keep track of the number of the (0-9) inputs
+  COUNTER_NUM: PROCESS(reset, clk)  ---------------------------this counter one of the function is to keep track of the number of the (0-9) inputs
 
   BEGIN 
 
     IF counterRST2 = '1' THEN  -- active high reset 
 
         COUNT_NUM <= 0; 
-
+        
+    ELSIF reset='1' THEN
+          
+         COUNT_NUM <= 0; 
+        
     ELSIF clk'EVENT and clk='1' THEN 
 
         IF encount2= '1' THEN              
@@ -885,14 +889,17 @@ begin
   
      
  
-   COUNTER_LIST: PROCESS( clk)
+   COUNTER_LIST: PROCESS(reset, clk)
 
   BEGIN
 
     IF resetList = '1' THEN  -- active high reset
 
         COUNT_LIST <= 0;
-
+        
+    ELSIF reset ='1' THEN
+          
+           COUNT_LIST <= 0;
     ELSIF clk'EVENT and clk='1' THEN
 
         IF encounterList= '1' THEN              
@@ -964,6 +971,8 @@ begin
      BEGIN
        IF clk'EVENT AND clk='1' THEN
          register2 <= R;
+     
+             
        END IF;
      END PROCESS;
  
