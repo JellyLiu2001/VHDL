@@ -262,14 +262,14 @@ begin
             nextState <= recieve_byte;
         
         end if;
-      When  recieve_byte =>
+      When  recieve_byte =>         -------------Change the base of byte to ASCII and send to the txdata
           if dataReady ='1' then
             if byte(7 downto 4) < "1010" then    ---------first 4 bits represents from 0-9
-                R(7 downto 4)<="0011";
+                R(7 downto 4)<="0011";            -----------the first four bit of number from 0-9 is 0011
                 R(3 downto 0) <= byte(7 downto 4);
             else 
                  
-                R(7 downto 4) <="0100";
+                R(7 downto 4) <="0100";            -------the first four bit of character is 0100
                 if byte(7 downto 4)= "1010" then ------10 hexA 
                   R(3 downto 0) <= "0001";
                 Elsif byte(7 downto 4)= "1011" then ---11B 
@@ -290,13 +290,13 @@ begin
           end if;
   
       
-      When Print_byte_one =>
+      When Print_byte_one =>            ---------If the seqDone='1' which means stop receiving
         if seqDone='1' then
           nextState <= stop_print;
         else
         nextState <= recieve_byte_2;
         end if;
-      When recieve_byte_2 =>
+      When recieve_byte_2 => 
         if seqDone='1' then
           nextState <= stop_print;
         elsif txdone='1' then
@@ -338,7 +338,7 @@ begin
            nextState <= Print_byte_two;
         end if;
       
-      when recieve_space =>
+      when recieve_space =>         --------when the two byte is receive, then input space the Tx module
         if txdone ='1' then
             R(7 downto 0)<= "00100000";
             nextState <= print_space;
@@ -354,12 +354,12 @@ begin
        else 
          nextState <= waiting_tx;
        end if;
-      When undefined =>
+      When undefined =>                  --------all the undefined state back to initial
         nextState <=  S0_INIT;
       WHEN stop_print =>
         nextState <= print_lastbyte;
         
-      WHEN print_lastbyte =>
+      WHEN print_lastbyte =>            ---------when the last byte is receive, print the byte and back to initial
           if txdone='1' then
             if byte(3 downto 0) < "1010" then    ---------last 4 bits represents from 0-9
                 R(7 downto 4)<="0011";
@@ -390,7 +390,7 @@ begin
 
           nextState <= S0_INIT;
         end if;
-     WHEN n_print =>
+     WHEN n_print =>       --------------when the ANNN command is executed, input '/n' to change a line
       if txdone ='1' then
         
         nextState <= wait_txnow;
@@ -403,7 +403,7 @@ begin
       else
         nextState <=wait_txnow;
       end if;
-     WHEN r_print =>
+     WHEN r_print => ------------------when the ANNN command is executed, input '/r' to start a new line
        if txdone='1' then
         
           nextState <= waiting_tx;
@@ -668,9 +668,9 @@ begin
     
       
       
-      When  recieve_byte =>
+      When  recieve_byte =>  -----everytime when the signal start to be received, the txnow go low and when the data are transmitted successfully to the Tx module, txdone go high
           txNow <='0';
-      When Print_byte_one =>
+      When Print_byte_one =>    ----------transmit the received data to Tx module
         txData<= register2 (7 downto 0);
         txNow<='1';       
       When recieve_byte_2 =>
